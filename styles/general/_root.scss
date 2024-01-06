@@ -1,0 +1,26 @@
+:root {
+    --bg: #fafafa;
+    --font: "Archivo", sans-serif;
+    --font-display: "Archivo Narrow", sans-serif;
+    --hotpink: #b79cf5;
+    --orange: rgb(54, 33, 242);
+    --gradient: linear-gradient(60deg, var(--orange), var(--hotpink));
+    --color-primary: #18181A;
+    --color-secondary: #75757C;
+    --color-dark: #364C62;
+    --color-light: #F5F5F5;
+    --font-family-primary: 'Roboto Mono', monospace;
+    --font-family-secondary: 'Rubik Mono One', sans-serif;
+    
+    // Global transition values
+    --td: 150ms;
+    --te: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  
+  body {
+    margin: auto;
+    min-height: 100vh;
+    background: var(--bg);
+    font-family: var(--font);
+  }
+  

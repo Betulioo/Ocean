@@ -1,0 +1,31 @@
+.endImg{
+    width: 100%;
+    height: 75vh;
+    border-radius: 10%;
+    top: 20%;
+    object-fit: contain
+}
+
+.endDiv{
+    top: 233%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 7%;
+}
+.nextLvlBtn{
+    bottom: 10%;
+    z-index: 2;
+}
+.tryAgainBtn{
+    bottom: 10%;
+    z-index: 2;
+}
+canvas {
+    width: 100%;
+    height: 80vh;
+    position: absolute;
+    z-index: 1;
+  }

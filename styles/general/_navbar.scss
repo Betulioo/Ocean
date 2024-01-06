@@ -1,0 +1,32 @@
+.status {
+    background-color: rgba(227, 237, 248, 0.754);
+    color: #E1522D;
+    position: fixed;
+    right: 0%;
+    display: inline;
+    width: 20vw;
+    height: 100vh;
+  }
+  
+  .status-section {
+    text-align: center;
+    display: flex;
+    gap: 32px;
+  }
+  
+  .status-section h3 {
+    margin: 0;
+  }
+  
+  /* Add more styling as needed */
+  
+  .spanAttempts {
+    color: red; /* Example: Style attempts differently */
+  }
+  
+  /* Media query for responsive design if needed */
+  @media (max-width: 600px) {
+    .status {
+      flex-direction: column;
+    }
+  }
