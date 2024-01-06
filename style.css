@@ -12172,7 +12172,7 @@ main {
   display: flex;
   position: relative;
   background-color: #48ffc2;
-  background-image: url("public/assets/memoryGame/background.png");
+  background-image: url("assets/memoryGame/background.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
