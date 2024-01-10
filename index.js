@@ -61,16 +61,16 @@ let oceanCards = [
   },
 ];
 let oceanCards6 = [
-  {
-    id: 1,
-    name: "marine1",
-    img: "assets/memoryGame/marine1.png",
-  },
-  {
-    id: 2,
-    name: "marine2",
-    img: "assets/memoryGame/marine2.png",
-  },
+  // {
+  //   id: 1,
+  //   name: "marine1",
+  //   img: "assets/memoryGame/marine1.png",
+  // },
+  // {
+  //   id: 2,
+  //   name: "marine2",
+  //   img: "assets/memoryGame/marine2.png",
+  // },
   // {
   //   id: 3,
   //   name: "marine3",
@@ -97,7 +97,7 @@ const gridDiv$$ = document.querySelector('[data-function="grid"]');
 const main$$ = document.querySelector("main");
 // we concat the array to duplicate it
 // let totalOceanCards = oceanCards.concat(oceanCards);
-let totalOceanCards = oceanCards6.concat(oceanCards6);
+let totalOceanCards = []
 
 //create an array cardsPicked to save the cards picked
 let cardsPicked = [];
@@ -133,6 +133,24 @@ const newGameButton$$ = document.querySelector(
   '[data-function="newGameButton"]'
 );
 const startLi$$ = document.querySelector('[data-function="startLi"]');
+//---------------------Fetch API--------------------------//
+
+const getData = async ()=>{
+let allCards = []
+  const response = await fetch(`http://localhost:5000/card`);
+  const cards = await response.json();
+  // console.log(cards)
+  for (const card of cards) {
+    allCards.push(card);
+    allCards.push(card);
+  // console.log("hello");
+
+  }
+  return allCards
+// console.log(oceanCards6);
+}
+
+//---------------------Fetch API--------------------------//
 
 //-------------------- confeti-----------------------
 
@@ -308,7 +326,7 @@ const asideCards = (MatchedCards) => {
       singlesCard.push(element);
     });
   }
-  console.log(singlesCard);
+  // console.log(singlesCard);
 
   if (singlesCard) {
     setTimeout(() => {
@@ -345,8 +363,9 @@ const asideCards = (MatchedCards) => {
 // ----------------- flip ---------------------
 
 // this function select the elements whit class="card" and for each one of them give it a click event that change the event current target or the target clicked a new class called "descubierta"
-const flipCard = (event, i) => {
-  const card = totalOceanCards[i];
+const flipCard = (event, i, cardArray) => {
+  let card = cardArray[i];
+  // console.log(card);
   // const cardWon = cardsMatched.find(findedCard=> findedCard.name === card.name);
 
   cardsPicked.push(card);
@@ -526,7 +545,6 @@ pauseButton$$.onclick = pause;
 
 const newGame = () => {
   // this function sort sort the array and with the math.random  is sort randomdly
-  totalOceanCards.sort(() => 0.5 - Math.random());
   restart();
   pauseButton$$.style.display = "block";
 };
@@ -543,6 +561,8 @@ startButton$$.onclick = start;
 //this function create the table with the cards
 
 const createTable = (cardArray) => {
+  // console.log(cardArray);
+  cardArray.sort(() => 0.5 - Math.random());
   main$$.innerHTML = "";
   const divCards$$ = document.createElement("div");
   divCards$$.setAttribute("data-function", "cardsReady");
@@ -561,7 +581,7 @@ const createTable = (cardArray) => {
 
   for (let i = 0; i < cardArray.length; i++) {
     const cardInfo = cardArray[i];
-    // console.log(i);
+    // console.log(cardInfo.id);
 
     let cardDiv$$ = document.createElement("div");
     cardDiv$$.className = `cardDiv card__contenido`;
@@ -576,12 +596,30 @@ const createTable = (cardArray) => {
     cardDiv2$$.appendChild(cardDiv$$);
     cardDiv$$.appendChild(cardImg$$);
     divTable$$.appendChild(cardDiv2$$);
-    cardDiv2$$.addEventListener("click", (event) => flipCard(event, i));
+    cardDiv2$$.addEventListener("click", (event) => flipCard(event, i, cardArray));
   }
 };
+
+// ----------------------- Maping cards----------------//
+
+
+const mapped = (noMapped)=>{
+  return noMapped.map((card)=>({
+    name: card.name,
+    img: card.img,
+    id: card._id,
+    description: card.description
+
+  }))
+}
+
+// ----------------------- Maping cards----------------//
+
 //this is our initializator function
 
-const onInit = () => {
+const onInit = async () => {
+const allcards = await getData();
+const totalOceanCards = mapped(allcards)
   createTable(totalOceanCards);
   chronometer();
 };
