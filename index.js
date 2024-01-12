@@ -1,103 +1,7 @@
-let oceanCards = [
-  {
-    id: 1,
-    name: "marine1",
-    img: "assets/memoryGame/marine1.png",
-  },
-  {
-    id: 2,
-    name: "marine2",
-    img: "assets/memoryGame/marine2.png",
-  },
-  {
-    id: 3,
-    name: "marine3",
-    img: "assets/memoryGame/marine3.png",
-  },
-  {
-    id: 4,
-    name: "marine4",
-    img: "assets/memoryGame/marine4.png",
-  },
-  {
-    id: 5,
-    name: "marine5",
-    img: "assets/memoryGame/marine5.png",
-  },
-  {
-    id: 6,
-    name: "marine6",
-    img: "assets/memoryGame/marine6.png",
-  },
-  {
-    id: 7,
-    name: "marine7",
-    img: "assets/memoryGame/marine7.png",
-  },
-  {
-    id: 8,
-    name: "marine8",
-    img: "assets/memoryGame/marine8.png",
-  },
-  {
-    id: 9,
-    name: "marine9",
-    img: "assets/memoryGame/marine9.png",
-  },
-  {
-    id: 10,
-    name: "marine10",
-    img: "assets/memoryGame/marine10.png",
-  },
-  {
-    id: 11,
-    name: "marine11",
-    img: "assets/memoryGame/marine11.png",
-  },
-  {
-    id: 12,
-    name: "marine12",
-    img: "assets/memoryGame/marine12.png",
-  },
-];
-let oceanCards6 = [
-  // {
-  //   id: 1,
-  //   name: "marine1",
-  //   img: "assets/memoryGame/marine1.png",
-  // },
-  // {
-  //   id: 2,
-  //   name: "marine2",
-  //   img: "assets/memoryGame/marine2.png",
-  // },
-  // {
-  //   id: 3,
-  //   name: "marine3",
-  //   img: "assets/memoryGame/marine3.png",
-  // },
-  // {
-  //   id: 4,
-  //   name: "marine4",
-  //   img: "assets/memoryGame/marine4.png",
-  // },
-  // {
-  //   id: 5,
-  //   name: "marine5",
-  //   img: "assets/memoryGame/marine5.png",
-  // },
-  // {
-  //   id: 6,
-  //   name: "marine6",
-  //   img: "assets/memoryGame/marine6.png",
-  // }
-];
+let cardsToShow = [];
 
 const gridDiv$$ = document.querySelector('[data-function="grid"]');
 const main$$ = document.querySelector("main");
-// we concat the array to duplicate it
-// let totalOceanCards = oceanCards.concat(oceanCards);
-let totalOceanCards = []
 
 //create an array cardsPicked to save the cards picked
 let cardsPicked = [];
@@ -109,21 +13,25 @@ let score = 0;
 // this variables are for the chronometer and endGame
 let minutos = 0;
 let segundos = 0;
-
-//chronometer
+//-------------------------chronometer-------------------------//
 let intervalId;
 let chronoDiv$$ = document.querySelector('[data-function="chronometer"]');
+//-------------------------chronometer-------------------------//
 
-// navbar
+//------------------------- navbar-------------------------//
 const divCount2$$ = document.querySelector('[data-function="score"]');
+//------------------------- navbar-------------------------//
 
-//compare card
+//-------------------------Levels-------------------------//
+let level = 1;
+//-------------------------Levels-------------------------//
 
-//contador
+//-------------------------contador-------------------------//
 const divCount$$ = document.querySelector('[data-function="attempts"]');
 const score$$ = document.querySelector('[data-function="score"]');
+//-------------------------contador-------------------------//
 
-//restart
+//-------------------------restart selectors-----------------------------//
 const restartButton$$ = document.querySelector(
   '[data-function="restartButton"]'
 );
@@ -133,27 +41,207 @@ const newGameButton$$ = document.querySelector(
   '[data-function="newGameButton"]'
 );
 const startLi$$ = document.querySelector('[data-function="startLi"]');
-//---------------------Fetch API--------------------------//
+//-------------------------restart selectors-----------------------------//
+//-------------------------Login-------------------------//
+const register$$ = document.querySelector("section");
 
-const getData = async ()=>{
-let allCards = []
+const loginHtml = () => {
+  main$$.innerHTML = `    <form action="http://localhost:5000/user/login" method="POST" class="user-login">
+  <!-- <div class="logo">
+    <img src="./assets/CBM_Logo-05.png" alt="Logo de CBM Retro Shop" />
+  </div> -->
+  <div class="login-flex">
+    
+    <div class="login-block">
+      <h2>Log in</h2>
+      <div class="login-form">
+        <label id="email-label"
+          >Email <input id="email" name="email" type="email" required
+        /></label>
+        <label
+          >Password<input
+            id="password"
+            name="password"
+            type="password"
+            
+            required
+        /></label>
+        <button class="form" type="submit">Log in</button>
+      </div>
+    </div>
+  </div>
+</form>`;
+};
+
+const localpostFetch = async (formData) => {
+  try {
+    const response = await fetch("http://localhost:5000/user/login",{ method: "POST", body: JSON.stringify(formData), headers: {
+        "content-Type": "application/json",
+      },
+    });
+    const result = await response.json();
+    if(response.ok){
+      // const data = await response.json();  
+      const token = result.token;
+
+      localStorage.setItem('token', token);
+      // window.location.href = "../PROFILE/index-profile.html"
+      // console.log("datos enviados con exito")
+    }else{
+      console.error("error al enviar los datos")
+    }
+    // console.log(response)
+    return result
+} catch (error) {
+  console.error("Error al enviar los dato", error)
+}
+};
+const localgetFetch = async () => {
+  const token = localStorage.getItem("token")
+;
+  const response = await fetch(`http://localhost:5000/user/profile`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const result = await response.json();
+return result
+};
+const logOut = () =>{
+  const logOut$$ = document.querySelector("#logOut");
+  logOut$$.addEventListener("click", ()=>{
+    localStorage.removeItem("token");
+    window.location.href = "https://retro-store-front.vercel.app/z_LOGIN/index-login.html"
+  })
+}
+
+const botonSubmit = async()=>{
+document.querySelector("form").addEventListener("submit",async(event)=>{
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const formDataObject = {};
+
+formData.forEach((value,key)=>{ formDataObject[key]=value})
+  
+  try {
+   await localpostFetch(formDataObject)
+   ifLogged()
+  } catch (error) {
+    console.error("error al enviar los datos")
+  }
+})}
+
+const ifLogged = ()=>{
+  if(localStorage){
+    localgetFetch()
+    newGame()
+  }
+}
+//-------------------------Login-------------------------//
+//-------------------------Collection--------------------//
+const getCollection = async ()=>{
+  const userInfo = await localgetFetch();
+  const collectionId = userInfo.collection;
+
+  const response = await fetch(`http://localhost:5000/collection/id/${collectionId}`);
+  const collection = await response.json();
+  const deck = collection.deckId
+  const cardsId = deck[0].cards;
+  const cards = await getCardsUser(cardsId)
+  
+
+
+    onInit(cards)
+  
+
+}
+
+const getCardsUser = async(cardsId)=>{
+
+  let cardsArray = []
+  for (let i = 0; i < cardsId.length; i++) {
+    const element = cardsId[i];
+    const response = await fetch(`http://localhost:5000/card/id/${element}`);
+    const cards = await response.json();
+    cardsArray.push(cards)
+    
+  }
+  // console.log(cardsArray);
+  return cardsArray
+ 
+
+}
+//-------------------------Collection--------------------//
+
+
+
+//---------------------Fetch API--------------------------//
+const getData = async () => {
+  let allCards = [];
   const response = await fetch(`http://localhost:5000/card`);
   const cards = await response.json();
   // console.log(cards)
   for (const card of cards) {
     allCards.push(card);
-    allCards.push(card);
-  // console.log("hello");
-
+    // allCards.push(card);
+    // console.log("hello");
   }
-  return allCards
-// console.log(oceanCards6);
-}
-
+  return allCards;
+  // console.log(oceanCards6);
+};
 //---------------------Fetch API--------------------------//
 
-//-------------------- confeti-----------------------
+//-------------------Levels---------------------------//
+const levels = async (level = 1, array) => {
+  let counterLevel = level - 1;
+  const cards = await array;
+  // console.log(cards);
 
+  for (let i = counterLevel; i < cards.length; i++) {
+    const element = cards[i];
+
+    if (level === 1) {
+      lvl(element, level);
+      return;
+    } else if (level === 2) {
+      lvl(element, level);
+      return;
+    } else if (level === 3) {
+      lvl(element, level);
+      return;
+    } else if (level === 4) {
+      lvl(element, level);
+      return;
+    } else if (level === 5) {
+      lvl(element, level);
+      return;
+    } else if (level === 6) {
+      lvl(element, level);
+      return;
+    } else if (level === 7) {
+      lvl(element, level);
+      return;
+    } else if (level === 8) {
+      lvl(element, level);
+      return;
+    } else if (level === 9) {
+      lvl(element, level);
+      return;
+    }
+  }
+};
+const lvl = (element, i) => {
+  console.log(`Level: ${i}`);
+  cardsToShow.push(element);
+  const cardMap = mapped(cardsToShow);
+  createTable(cardMap.concat(cardMap));
+  return;
+};
+//-------------------Levels---------------------------//
+
+//-------------------- confeti-----------------------//
 // global variables
 const confeti = () => {
   const confetti = document.getElementById("confetti");
@@ -305,9 +393,9 @@ const confeti = () => {
     setTimeout(confettiLoop, 700 + Math.random() * 1700);
   }
 };
+//-----------------Confeti------------------------//
 
-//----------------- asideCards---------------------
-
+//----------------- asideCards---------------------//
 const asideCards = (MatchedCards) => {
   const cardssDiv$$ = document.querySelector('[data-function="cardsReady"]');
   let singlesCard = [];
@@ -360,7 +448,9 @@ const asideCards = (MatchedCards) => {
     }, 1200);
   }
 };
-// ----------------- flip ---------------------
+//----------------- asideCards---------------------//
+
+// ----------------- flip ---------------------//
 
 // this function select the elements whit class="card" and for each one of them give it a click event that change the event current target or the target clicked a new class called "descubierta"
 const flipCard = (event, i, cardArray) => {
@@ -381,9 +471,9 @@ const flipCard = (event, i, cardArray) => {
     setTimeout(compareCards(), 50);
   }
 };
+// ----------------- flip ---------------------//
 
-//-------------------- contador ------------
-
+//-------------------- contador ------------//
 const contador = () => {
   count++;
 
@@ -399,8 +489,8 @@ const scorePlay = () => {
   score$$.textContent = ` ${score}`;
   endFn();
 };
-
-//------------------ comparador ----------------------
+//-------------------- contador ------------//
+//------------------ comparador --------------------//
 
 // this function compare the selected cards and compared it
 const removeClass = () => {
@@ -440,9 +530,9 @@ const compareCards = () => {
   }
   // console.log(cardsPicked);
 };
+//------------------ comparador --------------------//
 
-//--------------------- chronometer----------------
-
+//--------------------- chronometer----------------//
 const chronometer = () => {
   let minutos = 0;
   let segundos = 0;
@@ -467,9 +557,9 @@ const chronometer = () => {
     clearInterval(intervalId);
   }
 };
+//--------------------- chronometer----------------//
 
-//----------------endGame-------------------
-
+//----------------endGame-------------------//
 const endGame = () => {
   main$$.innerHTML = "";
 
@@ -489,7 +579,7 @@ const endGame = () => {
   nextLvlBtn$$.classList = "nextLvlBtn btn btn-primary";
   nextLvlBtn$$.id = "nextLvlBtn";
   nextLvlBtn$$.innerText = "Next level ¡Hurray! ";
-  nextLvlBtn$$.onclick = newGame;
+  nextLvlBtn$$.onclick = nextLvl;
 
   const tryAgainBtn$$ = document.createElement("button");
   tryAgainBtn$$.setAttribute("type", "button");
@@ -511,18 +601,19 @@ const endGame = () => {
 };
 
 const endFn = () => {
-  if (score === oceanCards6.length) {
+  if (score === cardsToShow.length) {
     chronometer();
     endGame();
   }
 };
+//----------------endGame-------------------//
 
-//------------------restart----------------
+//------------------Start-restart----------------//
 
 startLi$$.style.display = "none";
 pauseButton$$.style.display = "none";
 
-const restart = () => {
+const nextLevel = () => {
   const confetti$$ = document.getElementById("confetti");
   const endDiv$$ = document.getElementById("endDiv");
 
@@ -534,18 +625,31 @@ const restart = () => {
   divCount$$.textContent = ` ${count}`;
   divCount2$$.textContent = ` ${score}`;
   // cardssDiv$$.style.display = "block"
-  onInit();
+  getCollection()
 };
-
+const newGame = () => {
+  level = 1;
+  cardsToShow = [];
+  main$$.innerHTML = "";
+  clearInterval(intervalId);
+  segundos = 0;
+  minutos = 0;
+  count = 0;
+  score = 0;
+  divCount$$.textContent = ` ${count}`;
+  divCount2$$.textContent = ` ${score}`;
+  // cardssDiv$$.style.display = "block"
+  getCollection()
+};
 const pause = () => {
   clearInterval(intervalId);
   startLi$$.style.display = "block";
 };
 pauseButton$$.onclick = pause;
 
-const newGame = () => {
-  // this function sort sort the array and with the math.random  is sort randomdly
-  restart();
+const nextLvl = () => {
+  level++;
+  nextLevel();
   pauseButton$$.style.display = "block";
 };
 newGameButton$$.onclick = newGame;
@@ -555,8 +659,9 @@ const start = () => {
   startLi$$.style.display = "none";
 };
 startButton$$.onclick = start;
+//------------------Start-restart----------------//
 
-// ---------------- inicio   --------------------
+// ---------------- inicio   --------------------//
 
 //this function create the table with the cards
 
@@ -596,32 +701,38 @@ const createTable = (cardArray) => {
     cardDiv2$$.appendChild(cardDiv$$);
     cardDiv$$.appendChild(cardImg$$);
     divTable$$.appendChild(cardDiv2$$);
-    cardDiv2$$.addEventListener("click", (event) => flipCard(event, i, cardArray));
+    cardDiv2$$.addEventListener("click", (event) =>
+      flipCard(event, i, cardArray)
+    );
   }
 };
 
 // ----------------------- Maping cards----------------//
 
-
-const mapped = (noMapped)=>{
-  return noMapped.map((card)=>({
+const mapped = (noMapped) => {
+  return noMapped.map((card) => ({
     name: card.name,
     img: card.img,
     id: card._id,
-    description: card.description
-
-  }))
-}
+    description: card.description,
+  }));
+};
 
 // ----------------------- Maping cards----------------//
 
 //this is our initializator function
 
-const onInit = async () => {
-const allcards = await getData();
-const totalOceanCards = mapped(allcards)
-  createTable(totalOceanCards);
+const onInit = async (cards) => {
+const allCards = await cards
+// console.log(allCards);
+  levels(level, allCards)
+
   chronometer();
 };
-
-// onInit();
+const initLogin = async ()=>{
+  loginHtml();
+  botonSubmit();
+  
+}
+initLogin()
+// ---------------- inicio   --------------------//

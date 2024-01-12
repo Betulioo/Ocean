@@ -12389,4 +12389,80 @@ canvas {
   height: 80vh;
   position: absolute;
   z-index: 1;
+}
+
+.user-login {
+  height: 100vh;
+  width: 100vw;
+  background-image: url("https://i.gifer.com/xK.gif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.user-login .logo {
+  height: 120px;
+  display: flex;
+}
+.user-login .login-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-login .login-block {
+  background-color: #e926bf;
+  width: 500px;
+  height: 300px;
+  border: white 2px solid;
+}
+.user-login .login-block .login-form {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.user-login .login-block h2, .user-login .login-block .h2 {
+  font-family: "Upheaval";
+  color: white;
+  font-size: 34px;
+  margin-left: 38px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  -webkit-text-stroke: 1px black;
+}
+.user-login .login-block label {
+  font-family: "Upheaval";
+  color: white;
+  font-size: 18px;
+  margin-bottom: 20px;
+  -webkit-text-stroke: 1px black;
+  display: flex;
+  flex-direction: column;
+}
+.user-login .login-block label input {
+  width: 420px;
+  margin-top: 10px;
+  height: 30px;
+}
+.user-login .login-block label .short-input {
+  width: 200px;
+  margin-top: 10px;
+  height: 30px;
+}
+.user-login .login-block button {
+  width: 100px;
+  height: 40px;
+  background-color: #35063f;
+  color: white;
+  font-family: "Upheaval";
+}
+.user-login .login-block button:hover {
+  background-color: #762789;
+  color: white;
+}
+
+#email, #password, button {
+  z-index: 2;
 }/*# sourceMappingURL=style.css.map */
