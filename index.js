@@ -126,7 +126,9 @@ document.querySelector("form").addEventListener("submit",async(event)=>{
 formData.forEach((value,key)=>{ formDataObject[key]=value})
   
   try {
-   await localpostFetch(formDataObject)
+   const result = await localpostFetch(formDataObject);
+   putCollectionUser()
+  //  createCollection(result.userInfo._id,result.userInfo.username)
    ifLogged()
   } catch (error) {
     console.error("error al enviar los datos")
@@ -144,7 +146,7 @@ const ifLogged = ()=>{
 const getCollection = async ()=>{
   const userInfo = await localgetFetch();
   const collectionId = userInfo.collection;
-
+if(collectionId){
   const response = await fetch(`http://localhost:5000/collection/id/${collectionId}`);
   const collection = await response.json();
   const deck = collection.deckId
@@ -152,12 +154,16 @@ const getCollection = async ()=>{
   const cards = await getCardsUser(cardsId)
   
 
-
+cards
     onInit(cards)
+
+
+   }else {
+    const cardstwo = await getData();
+    onInit(cardstwo)
+   }
   
-
-}
-
+  }
 const getCardsUser = async(cardsId)=>{
 
   let cardsArray = []
@@ -174,6 +180,73 @@ const getCardsUser = async(cardsId)=>{
 
 }
 //-------------------------Collection--------------------//
+
+//--------------------------Put method-------------------//
+
+const createCollection = async(userId,userName)=>{
+  try {
+ 
+    
+    const formDataObject = { "name":`${userName}'s Collection`,"deckId":"659d5c728551ad13e4356aef", "userId": `${userId}` };
+
+
+
+    const response = await fetch(`http://localhost:5000/collection/`,{ method: "POST", body: JSON.stringify(formDataObject), headers: {
+        "content-Type": "application/json",
+      },
+    });
+    const result = await response.json();
+    if(response.ok){
+        putUser(result.userId,result._id)
+    }else{
+      console.error("error al enviar los datos")
+    }
+    // console.log(response)
+    return result
+} catch (error) {
+  console.error("Error ", error)
+}
+}
+
+const putCollectionUser = async()=>{
+
+  const result = await localgetFetch();
+console.log(result);
+  if(result.collection){
+    console.log("collection exist");
+
+}else {
+
+  console.log("collection dont exist");
+ createCollection(result._id,result.username)
+
+}
+}
+
+const putUser = async(id,collectionId)=>{
+  try {
+  const formDataObject = { "collection":`${collectionId}`};
+
+    const response = await fetch(`http://localhost:5000/user/edit/${id}`,{ method: "PUT", body: JSON.stringify(formDataObject), headers: {
+        "content-Type": "application/json",
+      },
+    });
+    const result = await response.json();
+    if(response.ok){
+      const token = result.token;
+      console.log("response ok");
+    }else{
+      console.error("error al enviar los datos")
+    }
+    // console.log(response)
+    return result
+} catch (error) {
+  console.error("Error al enviar los dato", error)
+}
+
+}
+
+//--------------------------Put method-------------------//
 
 
 
