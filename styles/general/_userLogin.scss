@@ -1,7 +1,7 @@
 .user-login {
   height: 100vh;
   width: 100vw;
-  background-image: url("https://i.gifer.com/xK.gif");
+  background-image: url("https://res.cloudinary.com/do20itlld/image/upload/v1704807151/Ocean/Cards/background_dzhwch.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -14,16 +14,21 @@
   }
 
   .login-flex {
+    margin-top: 20%;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
   .login-block {
-    background-color: #e926bf;
-    width: 500px;
-    height: 300px;
-    border: white 2px solid;
+    border-radius: 10px;
+    background-color: #b200fece;
+    width: 35%;
+    height: 350px;
+    border: rgb(21, 7, 20) 2px solid;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     .login-form {
       display: flex;
@@ -34,7 +39,6 @@
     }
 
     h2 {
-      font-family: "Upheaval";
       color: white;
       font-size: 34px;
       margin-left: 38px;
@@ -44,11 +48,10 @@
     }
 
     label {
-      font-family: "Upheaval";
       color: white;
-      font-size: 18px;
+      font-size: 25px;
       margin-bottom: 20px;
-      -webkit-text-stroke: 1px black;
+      -webkit-text-stroke: 0.5px rgb(133, 1, 194);
       display: flex;
       flex-direction: column;
 
@@ -56,6 +59,8 @@
         width: 420px;
         margin-top: 10px;
         height: 30px;
+        border-radius: 5px;
+        font-size: 25px;
       }
 
       .short-input {
@@ -70,7 +75,6 @@
       height: 40px;
       background-color: #35063f;
       color: white;
-      font-family: "Upheaval";
     }
 
     button:hover {

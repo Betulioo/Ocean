@@ -2,7 +2,7 @@ $offcanvas-horizontal-width: 230px;
 $enable-gradients: true;
 $gradient: linear-gradient(0deg, rgba(188,113,255,1) 0%, rgba(128,128,255,1) 100%);
 $border-radius: 5%;
-
+@import "./styles/animations/loading";
 @import "./node_modules/bootstrap/scss/bootstrap.scss";
 @import "./styles/animations/bubble";
 @import "./styles/general/root";
@@ -12,3 +12,4 @@ $border-radius: 5%;
 @import "./styles/animations/animations";
 @import "./styles/blocks/endGame";
 @import "./styles/general/userLogin";
+

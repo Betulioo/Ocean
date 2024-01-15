@@ -2,6 +2,7 @@ let cardsToShow = [];
 
 const gridDiv$$ = document.querySelector('[data-function="grid"]');
 const main$$ = document.querySelector("main");
+const body$$ = document.querySelector("body");
 
 //create an array cardsPicked to save the cards picked
 let cardsPicked = [];
@@ -20,6 +21,78 @@ let chronoDiv$$ = document.querySelector('[data-function="chronometer"]');
 
 //------------------------- navbar-------------------------//
 const divCount2$$ = document.querySelector('[data-function="score"]');
+
+const navbarHtml = () => {
+  body$$.innerHTML = `    <div id="background-wrap">
+  <div class="bubble x1"></div>
+  <div class="bubble x2"></div>
+  <div class="bubble x3"></div>
+  <div class="bubble x4"></div>
+  <div class="bubble x5"></div>
+  <div class="bubble x6"></div>
+  <div class="bubble x7"></div>
+  <div class="bubble x8"></div>
+  <div class="bubble x9"></div>
+  <div class="bubble x10"></div>
+</div>
+  <div id="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+</div>
+  <nav class="navbar bg-gradient fixed-top" >
+  <div class="container-fluid">
+    <h3>Score:<span class="" data-function="score"> 0</span></h3>
+    <h3>
+      Attempts:<span class="spanAttempts" data-function="attempts"> 0</span>
+    </h3>
+        <h3>Chronometer: <span data-function="chronometer">00:00</span></h3>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#" data-function="pauseButton" >Pause</a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#" data-function="restartButton">Restart</a>
+          </li> -->
+          <li class="nav-item" data-function="startLi">
+            <a class="nav-link" href="#" data-function="startButton">Start</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-function="newGameButton">New Game</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Dropdown
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li>
+        </ul>
+        <!-- <form class="d-flex mt-3" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form> -->
+      </div>
+    </div>
+  </div>
+</nav>
+<main>
+</main>`;
+};
 //------------------------- navbar-------------------------//
 
 //-------------------------Levels-------------------------//
@@ -31,21 +104,11 @@ const divCount$$ = document.querySelector('[data-function="attempts"]');
 const score$$ = document.querySelector('[data-function="score"]');
 //-------------------------contador-------------------------//
 
-//-------------------------restart selectors-----------------------------//
-const restartButton$$ = document.querySelector(
-  '[data-function="restartButton"]'
-);
-const pauseButton$$ = document.querySelector('[data-function="pauseButton"]');
-const startButton$$ = document.querySelector('[data-function="startButton"]');
-const newGameButton$$ = document.querySelector(
-  '[data-function="newGameButton"]'
-);
-const startLi$$ = document.querySelector('[data-function="startLi"]');
-//-------------------------restart selectors-----------------------------//
 //-------------------------Login-------------------------//
 const register$$ = document.querySelector("section");
 
 const loginHtml = () => {
+  const main$$ = document.querySelector("main");
   main$$.innerHTML = `    <form action="http://localhost:5000/user/login" method="POST" class="user-login">
   <!-- <div class="logo">
     <img src="./assets/CBM_Logo-05.png" alt="Logo de CBM Retro Shop" />
@@ -75,30 +138,55 @@ const loginHtml = () => {
 
 const localpostFetch = async (formData) => {
   try {
-    const response = await fetch("http://localhost:5000/user/login",{ method: "POST", body: JSON.stringify(formData), headers: {
+    const response = await fetch("http://localhost:5000/user/login", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
         "content-Type": "application/json",
       },
     });
     const result = await response.json();
-    if(response.ok){
-      // const data = await response.json();  
+    console.log(result.success);
+    if (result.success) {
       const token = result.token;
 
-      localStorage.setItem('token', token);
-      // window.location.href = "../PROFILE/index-profile.html"
-      // console.log("datos enviados con exito")
-    }else{
-      console.error("error al enviar los datos")
+      localStorage.setItem("token", token);
+    } else if (!result.success) {
+      console.log("error email no existe");
+      await localpostFetchRegister(formData);
+      localpostFetch(formData);
+    } else {
+      console.error("error al enviar los datos");
     }
-    // console.log(response)
-    return result
-} catch (error) {
-  console.error("Error al enviar los dato", error)
-}
+    return result;
+  } catch (error) {
+    console.error("Error al enviar los dato", error);
+  }
+};
+const localpostFetchRegister = async (formData) => {
+  try {
+    const response = await fetch("http://localhost:5000/user/register", {
+      method: "POST",
+      body: JSON.stringify(formData),
+      headers: {
+        "content-Type": "application/json",
+      },
+    });
+    const result = await response.json();
+
+    if (response.ok) {
+      console.log("datos enviados con exito");
+    } else {
+      console.error("error al enviar los datos");
+    }
+    console.log(response);
+    return result;
+  } catch (error) {
+    console.error("Error al enviar los dato", error);
+  }
 };
 const localgetFetch = async () => {
-  const token = localStorage.getItem("token")
-;
+  const token = localStorage.getItem("token");
   const response = await fetch(`http://localhost:5000/user/profile`, {
     method: "GET",
     headers: {
@@ -107,148 +195,170 @@ const localgetFetch = async () => {
   });
 
   const result = await response.json();
-return result
+  return result;
 };
-const logOut = () =>{
+const logOut = () => {
   const logOut$$ = document.querySelector("#logOut");
-  logOut$$.addEventListener("click", ()=>{
+  logOut$$.addEventListener("click", () => {
     localStorage.removeItem("token");
-    window.location.href = "https://retro-store-front.vercel.app/z_LOGIN/index-login.html"
-  })
-}
+    window.location.href =
+      "https://retro-store-front.vercel.app/z_LOGIN/index-login.html";
+  });
+};
 
-const botonSubmit = async()=>{
-document.querySelector("form").addEventListener("submit",async(event)=>{
-  event.preventDefault();
-  const formData = new FormData(event.target);
-  const formDataObject = {};
+const botonSubmit = async () => {
+  document.querySelector("form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const formDataObject = {};
 
-formData.forEach((value,key)=>{ formDataObject[key]=value})
-  
-  try {
-   const result = await localpostFetch(formDataObject);
-   putCollectionUser()
-  //  createCollection(result.userInfo._id,result.userInfo.username)
-   ifLogged()
-  } catch (error) {
-    console.error("error al enviar los datos")
+    formData.forEach((value, key) => {
+      formDataObject[key] = value;
+    });
+      console.log(formDataObject);
+    try {
+      const result = await localpostFetch(formDataObject);
+      if (result.success) {
+        console.log("hola holita");
+        putCollectionUser();
+        //  createCollection(result.userInfo._id,result.userInfo.username)
+        ifLogged();
+      }
+    } catch (error) {
+      console.error("error al enviar los datos" + error);
+    }
+  });
+};
+
+const ifLogged = () => {
+  if (localStorage) {
+    localgetFetch();
+    newGame();
   }
-})}
-
-const ifLogged = ()=>{
-  if(localStorage){
-    localgetFetch()
-    newGame()
-  }
-}
+};
 //-------------------------Login-------------------------//
 //-------------------------Collection--------------------//
-const getCollection = async ()=>{
+const getCollection = async () => {
+  showLoadingScreen();
   const userInfo = await localgetFetch();
   const collectionId = userInfo.collection;
-if(collectionId){
-  const response = await fetch(`http://localhost:5000/collection/id/${collectionId}`);
-  const collection = await response.json();
-  const deck = collection.deckId
-  const cardsId = deck[0].cards;
-  const cards = await getCardsUser(cardsId)
-  
+  if (collectionId) {
+    const response = await fetch(
+      `http://localhost:5000/collection/id/${collectionId}`
+    );
+    const collection = await response.json();
+    const deck = collection.deckId;
+    const cardsId = deck[0].cards;
+    const cards = await getCardsUser(cardsId);
 
-cards
-    onInit(cards)
+    cards;
 
-
-   }else {
+    onInit(cards);
+    hideLoadingScreeen();
+  } else {
+    showLoadingScreen();
     const cardstwo = await getData();
-    onInit(cardstwo)
-   }
-  
+    onInit(cardstwo);
+    hideLoadingScreeen();
   }
-const getCardsUser = async(cardsId)=>{
-
-  let cardsArray = []
+};
+const getCardsUser = async (cardsId) => {
+  let cardsArray = [];
   for (let i = 0; i < cardsId.length; i++) {
     const element = cardsId[i];
     const response = await fetch(`http://localhost:5000/card/id/${element}`);
     const cards = await response.json();
-    cardsArray.push(cards)
-    
+    cardsArray.push(cards);
   }
   // console.log(cardsArray);
-  return cardsArray
- 
-
-}
+  return cardsArray;
+};
 //-------------------------Collection--------------------//
 
 //--------------------------Put method-------------------//
 
-const createCollection = async(userId,userName)=>{
+const createCollection = async (userId, userName) => {
   try {
- 
-    
-    const formDataObject = { "name":`${userName}'s Collection`,"deckId":"659d5c728551ad13e4356aef", "userId": `${userId}` };
+    const formDataObject = {
+      name: `${userName}'s Collection`,
+      deckId: "659d5c728551ad13e4356aef",
+      userId: `${userId}`,
+    };
 
-
-
-    const response = await fetch(`http://localhost:5000/collection/`,{ method: "POST", body: JSON.stringify(formDataObject), headers: {
+    const response = await fetch(`http://localhost:5000/collection/`, {
+      method: "POST",
+      body: JSON.stringify(formDataObject),
+      headers: {
         "content-Type": "application/json",
       },
     });
     const result = await response.json();
-    if(response.ok){
-        putUser(result.userId,result._id)
-    }else{
-      console.error("error al enviar los datos")
+    if (response.ok) {
+      putUser(result.userId, result._id);
+    } else {
+      console.error("error al enviar los datos");
     }
     // console.log(response)
-    return result
-} catch (error) {
-  console.error("Error ", error)
-}
-}
+    return result;
+  } catch (error) {
+    console.error("Error ", error);
+  }
+};
 
-const putCollectionUser = async()=>{
-
+const putCollectionUser = async () => {
   const result = await localgetFetch();
-console.log(result);
-  if(result.collection){
+  if (result.collection) {
     console.log("collection exist");
+  } else {
+    console.log("collection dont exist");
+    createCollection(result._id, result.username);
+  }
+};
 
-}else {
-
-  console.log("collection dont exist");
- createCollection(result._id,result.username)
-
-}
-}
-
-const putUser = async(id,collectionId)=>{
+const putUser = async (id, collectionId) => {
   try {
-  const formDataObject = { "collection":`${collectionId}`};
+    const formDataObject = { collection: `${collectionId}` };
 
-    const response = await fetch(`http://localhost:5000/user/edit/${id}`,{ method: "PUT", body: JSON.stringify(formDataObject), headers: {
+    const response = await fetch(`http://localhost:5000/user/edit/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(formDataObject),
+      headers: {
         "content-Type": "application/json",
       },
     });
     const result = await response.json();
-    if(response.ok){
+    if (response.ok) {
       const token = result.token;
       console.log("response ok");
-    }else{
-      console.error("error al enviar los datos")
+    } else {
+      console.error("error al enviar los datos");
     }
     // console.log(response)
-    return result
-} catch (error) {
-  console.error("Error al enviar los dato", error)
-}
-
-}
+    return result;
+  } catch (error) {
+    console.error("Error al enviar los dato", error);
+  }
+};
 
 //--------------------------Put method-------------------//
 
+//--------------------Loading----------------------------//
+const showLoadingScreen = () => {
+  const loadingScreen = document.getElementById("loading-screen");
+  loadingScreen.style.display = "flex";
+};
 
+const hideLoadingScreeen = () => {
+  const loadingScreen = document.getElementById("loading-screen");
+  loadingScreen.style.display = "none";
+};
+
+const initialize = async (array) => {
+  showLoadingScreen();
+
+  hideLoadingScreeen();
+};
+//--------------------Loading----------------------------//
 
 //---------------------Fetch API--------------------------//
 const getData = async () => {
@@ -269,7 +379,9 @@ const getData = async () => {
 //-------------------Levels---------------------------//
 const levels = async (level = 1, array) => {
   let counterLevel = level - 1;
+  // initialize()
   const cards = await array;
+
   // console.log(cards);
 
   for (let i = counterLevel; i < cards.length; i++) {
@@ -309,6 +421,7 @@ const lvl = (element, i) => {
   console.log(`Level: ${i}`);
   cardsToShow.push(element);
   const cardMap = mapped(cardsToShow);
+  // const allcardMap = cardMap.concat(cardMap)
   createTable(cardMap.concat(cardMap));
   return;
 };
@@ -470,6 +583,8 @@ const confeti = () => {
 
 //----------------- asideCards---------------------//
 const asideCards = (MatchedCards) => {
+  const main$$ = document.querySelector("main");
+
   const cardssDiv$$ = document.querySelector('[data-function="cardsReady"]');
   let singlesCard = [];
   let cardMain$$ = document.createElement("div");
@@ -605,6 +720,8 @@ const compareCards = () => {
 };
 //------------------ comparador --------------------//
 
+
+
 //--------------------- chronometer----------------//
 const chronometer = () => {
   let minutos = 0;
@@ -683,9 +800,6 @@ const endFn = () => {
 
 //------------------Start-restart----------------//
 
-startLi$$.style.display = "none";
-pauseButton$$.style.display = "none";
-
 const nextLevel = () => {
   const confetti$$ = document.getElementById("confetti");
   const endDiv$$ = document.getElementById("endDiv");
@@ -698,9 +812,10 @@ const nextLevel = () => {
   divCount$$.textContent = ` ${count}`;
   divCount2$$.textContent = ` ${score}`;
   // cardssDiv$$.style.display = "block"
-  getCollection()
+  getCollection();
 };
 const newGame = () => {
+const   main$$ = document.querySelector("main");
   level = 1;
   cardsToShow = [];
   main$$.innerHTML = "";
@@ -712,27 +827,42 @@ const newGame = () => {
   divCount$$.textContent = ` ${count}`;
   divCount2$$.textContent = ` ${score}`;
   // cardssDiv$$.style.display = "block"
-  getCollection()
+  getCollection();
 };
 const pause = () => {
   clearInterval(intervalId);
   startLi$$.style.display = "block";
 };
-pauseButton$$.onclick = pause;
 
 const nextLvl = () => {
   level++;
   nextLevel();
   pauseButton$$.style.display = "block";
 };
-newGameButton$$.onclick = newGame;
 
 const start = () => {
   chronometer();
   startLi$$.style.display = "none";
 };
-startButton$$.onclick = start;
+
 //------------------Start-restart----------------//
+  //-------------------------restart selectors-----------------------------//
+
+  const restartButton$$ = document.querySelector(
+    '[data-function="restartButton"]'
+  );
+  const pauseButton$$ = document.querySelector('[data-function="pauseButton"]');
+  const startButton$$ = document.querySelector('[data-function="startButton"]');
+  const newGameButton$$ = document.querySelector(
+    '[data-function="newGameButton"]'
+  );
+  const startLi$$ = document.querySelector('[data-function="startLi"]');
+  startLi$$.style.display = "none";
+  pauseButton$$.style.display = "none";
+  pauseButton$$.onclick = pause;
+  newGameButton$$.onclick = newGame;
+  startButton$$.onclick = start;
+  //-------------------------restart selectors-----------------------------//
 
 // ---------------- inicio   --------------------//
 
@@ -740,6 +870,7 @@ startButton$$.onclick = start;
 
 const createTable = (cardArray) => {
   // console.log(cardArray);
+  const main$$ = document.querySelector("main")
   cardArray.sort(() => 0.5 - Math.random());
   main$$.innerHTML = "";
   const divCards$$ = document.createElement("div");
@@ -796,16 +927,18 @@ const mapped = (noMapped) => {
 //this is our initializator function
 
 const onInit = async (cards) => {
-const allCards = await cards
-// console.log(allCards);
-  levels(level, allCards)
+  const allCards = await cards;
+
+  levels(level, allCards);
 
   chronometer();
 };
-const initLogin = async ()=>{
+const initLogin = async () => {
+  // navbarHtml();
+
   loginHtml();
+
   botonSubmit();
-  
-}
-initLogin()
+};
+initLogin();
 // ---------------- inicio   --------------------//
