@@ -17,9 +17,11 @@
     border: 6px solid #f3f3f3;
     border-top: 6px solid #3498db;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
+    width: 400px;
+    height: 400px;
+    animation: spin 1.7s linear infinite;
+    background-image: url("https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn");
+    background-size: contain;
 }
 
 @keyframes spin {

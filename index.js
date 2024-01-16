@@ -1,8 +1,22 @@
+
 let cardsToShow = [];
 
 const gridDiv$$ = document.querySelector('[data-function="grid"]');
 const main$$ = document.querySelector("main");
 const body$$ = document.querySelector("body");
+
+// ----------------Booleans----------------//
+const isloged = true;
+const isAdmin = true;
+const isEndGame = true;
+
+// ----------------Booleans----------------//
+
+//-----------------Pages-----------------//
+
+let page = 1;
+
+//-----------------Pages-----------------//
 
 //create an array cardsPicked to save the cards picked
 let cardsPicked = [];
@@ -91,6 +105,20 @@ const navbarHtml = () => {
   </div>
 </nav>
 <main>
+<div class="user-login">
+  <!-- <div class="logo">
+    <img src="./assets/CBM_Logo-05.png" alt="Logo de CBM Retro Shop" />
+  </div> -->
+  <div class="login-flex">
+    
+    <div class="login-block">
+      <h2>Log in</h2>
+      <div class="login-form">
+        <button class="form" type="submit">Log in</button>
+      </div>
+    </div>
+  </div>
+</div>
 </main>`;
 };
 //------------------------- navbar-------------------------//
@@ -104,15 +132,119 @@ const divCount$$ = document.querySelector('[data-function="attempts"]');
 const score$$ = document.querySelector('[data-function="score"]');
 //-------------------------contador-------------------------//
 
+//------------------------LandPage---------------------------//
+const toggle =(boolean)=>{
+    boolean = !boolean
+}
+const buttonPage = ()=>{
+  try {
+  const nextButton$$ = document.querySelector('[data-function="nextButton"]');
+        nextButton$$.addEventListener('click',()=>{
+          page++;
+          landPage();
+
+        })
+  } catch (error) {
+    
+  }
+
+  
+  
+  }
+const landPage = () => {
+
+  if (page === 1){
+  main$$.innerHTML = `
+
+<div class="land-div">
+
+  <div class="land-flex">
+    
+    <div class="land-block-one">
+    <div class="logo">
+    <img src="https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn" alt="Logo" />
+  </div> 
+      <h2>Welcome to the  Ocean</h2>
+      <p>This project was born from the idea of preserving the marine world.</p>
+      <p> Through learning we want to bring young children closer to the wonders of the ocean, its importance and relevance.</p>
+      <div class="div-button" >
+        <button data-function="nextButton" class="next" type="button">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+buttonPage();
+
+}else if (page === 2){
+
+  main$$.innerHTML = ` 
+<div class="land-div">
+
+  <div class="land-flex">
+    
+    <div class="land-block-two">
+    <div class="logo">
+    <img src="https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn" alt="Logo" />
+  </div> 
+      <h2>What is it about?</h2>
+      <p>Oceano is a memory game, where you have different decks of cards each with different types of marine animals, the idea is that as you advance in the game you get the cards of each deck.</p>
+      <p> The game is currently in prototype status.</p>
+      <div class="div-button">
+      <button data-function="nextButton" class="next" type="button">Next</button>
+    </div>
+  </div>
+</div>
+`;
+buttonPage();
+
+}else if(page === 3){
+  main$$.innerHTML = ` 
+<div class="land-div">
+
+  <div class="land-flex">
+    
+    <div class="land-block-three">
+    <div class="logo">
+    <img src="https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn" alt="Logo" />
+  </div> 
+      <h2>Oceano has the following functionalities:</h2>
+      <p>Registration and login: </p>
+      <p>When you register a deck collection is created where your progress and the different cards obtained will be saved.
+      </p>
+      <p>Different levels of difficulty: </p>
+      <p>As you progress the number of cards will increase.</p>
+      <div class="div-button">
+      <button data-function="nextButton" class="next" type="button">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+buttonPage();
+
+} else if(page === 4) {
+  loginHtml();
+  botonSubmit();
+}
+
+
+};
+
+
+//------------------------LandPage---------------------------//
+
+
 //-------------------------Login-------------------------//
-const register$$ = document.querySelector("section");
 
 const loginHtml = () => {
+
   const main$$ = document.querySelector("main");
-  main$$.innerHTML = `    <form action="http://localhost:5000/user/login" method="POST" class="user-login">
-  <!-- <div class="logo">
-    <img src="./assets/CBM_Logo-05.png" alt="Logo de CBM Retro Shop" />
-  </div> -->
+  main$$.innerHTML = `<form action="http://localhost:5000/user/login" method="POST" class="user-login">
+  <div class="logo">
+  <img src="https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn" alt="Logo" />
+</div> 
   <div class="login-flex">
     
     <div class="login-block">
@@ -129,7 +261,7 @@ const loginHtml = () => {
             
             required
         /></label>
-        <button class="form" type="submit">Log in</button>
+        <button class="next" type="submit">Log in</button>
       </div>
     </div>
   </div>
@@ -219,7 +351,6 @@ const botonSubmit = async () => {
     try {
       const result = await localpostFetch(formDataObject);
       if (result.success) {
-        console.log("hola holita");
         putCollectionUser();
         //  createCollection(result.userInfo._id,result.userInfo.username)
         ifLogged();
@@ -234,6 +365,8 @@ const ifLogged = () => {
   if (localStorage) {
     localgetFetch();
     newGame();
+    document.querySelector("nav").removeAttribute('hidden');
+
   }
 };
 //-------------------------Login-------------------------//
@@ -801,8 +934,6 @@ const endFn = () => {
 //------------------Start-restart----------------//
 
 const nextLevel = () => {
-  const confetti$$ = document.getElementById("confetti");
-  const endDiv$$ = document.getElementById("endDiv");
 
   clearInterval(intervalId);
   segundos = 0;
@@ -815,6 +946,7 @@ const nextLevel = () => {
   getCollection();
 };
 const newGame = () => {
+
 const   main$$ = document.querySelector("main");
   level = 1;
   cardsToShow = [];
@@ -934,11 +1066,7 @@ const onInit = async (cards) => {
   chronometer();
 };
 const initLogin = async () => {
-  // navbarHtml();
-
-  loginHtml();
-
-  botonSubmit();
+  landPage();
 };
 initLogin();
 // ---------------- inicio   --------------------//
