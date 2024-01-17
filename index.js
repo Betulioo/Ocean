@@ -324,7 +324,7 @@ const collectionComponent = async () => {
 
   divRow$$.innerHTML=""
 
-  const response = await fetch(`http://localhost:5000/card`);
+  const response = await fetch(`https://ocean-db.vercel.app/card`);
   const cards = await response.json();
   console.log(cards);
   for (let i = 0; i < cards.length; i++) {
@@ -348,7 +348,7 @@ const collectionComponent = async () => {
 
 const loginHtml = () => {
   const main$$ = document.querySelector("main");
-  main$$.innerHTML = `<form action="http://localhost:5000/user/login" method="POST" class="user-login">
+  main$$.innerHTML = `<form action="https://ocean-db.vercel.app/user/login" method="POST" class="user-login">
   <div class="logo">
   <img src="https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn" alt="Logo" />
 </div> 
@@ -377,7 +377,7 @@ const loginHtml = () => {
 
 const localpostFetch = async (formData) => {
   try {
-    const response = await fetch("http://localhost:5000/user/login", {
+    const response = await fetch("https://ocean-db.vercel.app/user/login", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -404,7 +404,7 @@ const localpostFetch = async (formData) => {
 };
 const localpostFetchRegister = async (formData) => {
   try {
-    const response = await fetch("http://localhost:5000/user/register", {
+    const response = await fetch("https://ocean-db.vercel.app/user/register", {
       method: "POST",
       body: JSON.stringify(formData),
       headers: {
@@ -426,7 +426,7 @@ const localpostFetchRegister = async (formData) => {
 };
 const localgetFetch = async () => {
   const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:5000/user/profile`, {
+  const response = await fetch(`https://ocean-db.vercel.app/user/profile`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -483,7 +483,7 @@ const getCollection = async () => {
   const collectionId = userInfo.collection;
   if (collectionId) {
     const response = await fetch(
-      `http://localhost:5000/collection/id/${collectionId}`
+      `https://ocean-db.vercel.app/collection/id/${collectionId}`
     );
     const collection = await response.json();
     const deck = collection.deckId;
@@ -505,7 +505,7 @@ const getCardsUser = async (cardsId) => {
   let cardsArray = [];
   for (let i = 0; i < cardsId.length; i++) {
     const element = cardsId[i];
-    const response = await fetch(`http://localhost:5000/card/id/${element}`);
+    const response = await fetch(`https://ocean-db.vercel.app/card/id/${element}`);
     const cards = await response.json();
     cardsArray.push(cards);
   }
@@ -524,7 +524,7 @@ const createCollection = async (userId, userName) => {
       userId: `${userId}`,
     };
 
-    const response = await fetch(`http://localhost:5000/collection/`, {
+    const response = await fetch(`https://ocean-db.vercel.app/collection/`, {
       method: "POST",
       body: JSON.stringify(formDataObject),
       headers: {
@@ -558,7 +558,7 @@ const putUser = async (id, collectionId) => {
   try {
     const formDataObject = { collection: `${collectionId}` };
 
-    const response = await fetch(`http://localhost:5000/user/edit/${id}`, {
+    const response = await fetch(`https://ocean-db.vercel.app/user/edit/${id}`, {
       method: "PUT",
       body: JSON.stringify(formDataObject),
       headers: {
@@ -602,7 +602,7 @@ const initialize = async (array) => {
 //---------------------Fetch API--------------------------//
 const getData = async () => {
   let allCards = [];
-  const response = await fetch(`http://localhost:5000/card`);
+  const response = await fetch(`https://ocean-db.vercel.app/card`);
   const cards = await response.json();
   // console.log(cards)
   for (const card of cards) {
