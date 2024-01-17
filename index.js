@@ -326,7 +326,7 @@ const collectionComponent = async () => {
 
   const response = await fetch(`https://ocean-db.vercel.app/card`);
   const cards = await response.json();
-  console.log(cards);
+  // console.log(cards);
   for (let i = 0; i < cards.length; i++) {
     const element = cards[i];
     if (i < 6 && collectionPage ===1) {
@@ -335,12 +335,12 @@ const collectionComponent = async () => {
     } else if (i >= 6 && collectionPage ===2) {
       cardComponent(element.img, element.name);
     }else {
-      console.log(element);
+      // console.log(element);
     }
   }
 
   
-  console.log(collectionPage);
+  // console.log(collectionPage);
 };
 //------------------------CollectionComponent----------------//
 
@@ -384,13 +384,13 @@ const localpostFetch = async (formData) => {
       },
     });
     const result = await response.json();
-    console.log(result.success);
+    // console.log(result.success);
     if (result.success) {
       const token = result.token;
 
       localStorage.setItem("token", token);
     } else if (!result.success) {
-      console.log("error email no existe");
+      // console.log("error email no existe");
       await localpostFetchRegister(formData);
       localpostFetch(formData);
     } else {
@@ -413,11 +413,11 @@ const localpostFetchRegister = async (formData) => {
     const result = await response.json();
 
     if (response.ok) {
-      console.log("datos enviados con exito");
+      // console.log("datos enviados con exito");
     } else {
-      console.error("error al enviar los datos");
+      // console.error("error al enviar los datos");
     }
-    console.log(response);
+    // console.log(response);
     return result;
   } catch (error) {
     console.error("Error al enviar los dato", error);
@@ -453,7 +453,7 @@ const botonSubmit = async () => {
     formData.forEach((value, key) => {
       formDataObject[key] = value;
     });
-    console.log(formDataObject);
+    // console.log(formDataObject);
     try {
       const result = await localpostFetch(formDataObject);
       if (result.success) {
@@ -546,9 +546,9 @@ const createCollection = async (userId, userName) => {
 const putCollectionUser = async () => {
   const result = await localgetFetch();
   if (result.collection) {
-    console.log("collection exist");
+    // console.log("collection exist");
   } else {
-    console.log("collection dont exist");
+    // console.log("collection dont exist");
     createCollection(result._id, result.username);
   }
 };
@@ -567,9 +567,9 @@ const putUser = async (id, collectionId) => {
     const result = await response.json();
     if (response.ok) {
       const token = result.token;
-      console.log("response ok");
+      // console.log("response ok");
     } else {
-      console.error("error al enviar los datos");
+      // console.error("error al enviar los datos");
     }
     // console.log(response)
     return result;
@@ -662,7 +662,7 @@ const levels = async (level = 1, array) => {
   // }
 };
 const lvl = (element, i) => {
-  console.log(`Level: ${i}`);
+  // console.log(`Level: ${i}`);
   cardsToShow.push(element);
   const cardMap = mapped(cardsToShow);
   // const allcardMap = cardMap.concat(cardMap)
