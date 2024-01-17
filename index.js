@@ -1,4 +1,3 @@
-
 let cardsToShow = [];
 
 const gridDiv$$ = document.querySelector('[data-function="grid"]');
@@ -15,7 +14,7 @@ const isEndGame = true;
 //-----------------Pages-----------------//
 
 let page = 1;
-
+let collectionPage = 1;
 //-----------------Pages-----------------//
 
 //create an array cardsPicked to save the cards picked
@@ -133,28 +132,21 @@ const score$$ = document.querySelector('[data-function="score"]');
 //-------------------------contador-------------------------//
 
 //------------------------LandPage---------------------------//
-const toggle =(boolean)=>{
-    boolean = !boolean
-}
-const buttonPage = ()=>{
+const toggle = (boolean) => {
+  boolean = !boolean;
+};
+const buttonPage = () => {
   try {
-  const nextButton$$ = document.querySelector('[data-function="nextButton"]');
-        nextButton$$.addEventListener('click',()=>{
-          page++;
-          landPage();
-
-        })
-  } catch (error) {
-    
-  }
-
-  
-  
-  }
+    const nextButton$$ = document.querySelector('[data-function="nextButton"]');
+    nextButton$$.addEventListener("click", () => {
+      page++;
+      landPage();
+    });
+  } catch (error) {}
+};
 const landPage = () => {
-
-  if (page === 1){
-  main$$.innerHTML = `
+  if (page === 1) {
+    main$$.innerHTML = `
 
 <div class="land-div">
 
@@ -175,11 +167,9 @@ const landPage = () => {
 </div>
 `;
 
-buttonPage();
-
-}else if (page === 2){
-
-  main$$.innerHTML = ` 
+    buttonPage();
+  } else if (page === 2) {
+    main$$.innerHTML = ` 
 <div class="land-div">
 
   <div class="land-flex">
@@ -197,10 +187,9 @@ buttonPage();
   </div>
 </div>
 `;
-buttonPage();
-
-}else if(page === 3){
-  main$$.innerHTML = ` 
+    buttonPage();
+  } else if (page === 3) {
+    main$$.innerHTML = ` 
 <div class="land-div">
 
   <div class="land-flex">
@@ -222,24 +211,142 @@ buttonPage();
   </div>
 </div>
 `;
-buttonPage();
-
-} else if(page === 4) {
-  loginHtml();
-  botonSubmit();
-}
-
-
+    buttonPage();
+  } else if (page === 4) {
+    loginHtml();
+    botonSubmit();
+  }
 };
-
 
 //------------------------LandPage---------------------------//
 
+//-------------------------Cardcomponent---------------------//
+
+// const cardComponent = (cardImg, cardName, cardDescription = "") => {
+//   const divTable$$ = document.querySelector(".list-table")
+//   const div$$ = document.createElement("div");
+//   const img$$ = document.createElement("img");
+//   const divdo$$ = document.createElement("div");
+//   const cardNameP$$ = document.createElement("p");
+//   const cardDescriptionP$$ = document.createElement("p");
+//   const divCol$$ = document.createElement("div");
+//   const divRow$$ = document.querySelector(".selctor");
+
+//   divCol$$.classList = "col-4";
+
+//   div$$.classList = "card cardComponent";
+//   div$$.setAttribute("style", "width: 18rem");
+
+//   img$$.setAttribute("src", `${cardImg}`);
+//   img$$.classList = "card-img-top imgComponent";
+//   img$$.setAttribute("alt", `${cardName}`);
+
+//   divdo$$.classList = "card-body";
+//   cardNameP$$.classList = "card-text cardName";
+//   cardNameP$$.textContent = `${cardName}`;
+
+//   cardDescriptionP$$.classList = "card-text cardDescription";
+//   cardDescriptionP$$.textContent = `${cardDescription}`;
+
+//   div$$.appendChild(img$$);
+//   divdo$$.appendChild(cardNameP$$);
+//   divdo$$.appendChild(cardDescriptionP$$);
+//   div$$.appendChild(divdo$$);
+//   divCol$$.appendChild(div$$);
+//   divRow$$.appendChild(divCol$$);
+// };
+const cardComponent = (cardImg, cardName, cardDescription = "") => {
+  const div$$ = document.createElement("div");
+  const img$$ = document.createElement("img");
+  const divdo$$ = document.createElement("div");
+  const cardNameP$$ = document.createElement("h2");
+  const cardDescriptionP$$ = document.createElement("p");
+
+  div$$.classList = "card cardComponent fadein";
+  div$$.setAttribute("style", "width: 18rem");
+
+  img$$.setAttribute("src", `${cardImg}`);
+  img$$.classList = "card-img-top imgComponent";
+  img$$.setAttribute("alt", `${cardName}`);
+
+  divdo$$.classList = "card-body";
+  cardNameP$$.classList = "card-text cardName";
+  cardNameP$$.textContent = `${cardName}`;
+
+  cardDescriptionP$$.classList = "card-text cardDescription";
+  cardDescriptionP$$.textContent = `${cardDescription}`;
+
+  div$$.appendChild(img$$);
+  divdo$$.appendChild(cardNameP$$);
+  divdo$$.appendChild(cardDescriptionP$$);
+  div$$.appendChild(divdo$$);
+ main$$.appendChild(div$$)
+
+ document.addEventListener("click",()=>{
+  div$$.classList='card cardComponent animati'
+setTimeout(()=>{
+  div$$.style.display = "none";
+},1200)
+})
+};
+//-------------------------Cardcomponent---------------------//
+
+//------------------------CollectionComponent----------------//
+
+const buttonCollection = ()=>{
+  const button$$ = document.createElement("button");
+  button$$.classList="button-class next";
+  button$$.textContent="Next"
+  button$$.setAttribute("type","button");
+  button$$.addEventListener('click',()=>{
+    if(collectionPage ===1){
+  collectionPage++
+    collectionComponent()
+}else if(collectionPage ===2){
+  collectionPage--
+  collectionComponent()
+}
+  })
+
+  return button$$
+}
+
+const collectionComponent = async () => {
+
+  const divTable$$ = document.createElement("div");
+  divTable$$.classList = "list-table container";
+  const divRow$$ = document.createElement("div");
+  divRow$$.classList = "row selctor";
+
+  divTable$$.appendChild(divRow$$);
+  main$$.appendChild(divTable$$);
+  divTable$$.appendChild(buttonCollection());
+
+  divRow$$.innerHTML=""
+
+  const response = await fetch(`http://localhost:5000/card`);
+  const cards = await response.json();
+  console.log(cards);
+  for (let i = 0; i < cards.length; i++) {
+    const element = cards[i];
+    if (i < 6 && collectionPage ===1) {
+      cardComponent(element.img, element.name);
+      
+    } else if (i >= 6 && collectionPage ===2) {
+      cardComponent(element.img, element.name);
+    }else {
+      console.log(element);
+    }
+  }
+
+  
+  console.log(collectionPage);
+};
+//------------------------CollectionComponent----------------//
 
 //-------------------------Login-------------------------//
 
 const loginHtml = () => {
-
   const main$$ = document.querySelector("main");
   main$$.innerHTML = `<form action="http://localhost:5000/user/login" method="POST" class="user-login">
   <div class="logo">
@@ -347,7 +454,7 @@ const botonSubmit = async () => {
     formData.forEach((value, key) => {
       formDataObject[key] = value;
     });
-      console.log(formDataObject);
+    console.log(formDataObject);
     try {
       const result = await localpostFetch(formDataObject);
       if (result.success) {
@@ -365,8 +472,7 @@ const ifLogged = () => {
   if (localStorage) {
     localgetFetch();
     newGame();
-    document.querySelector("nav").removeAttribute('hidden');
-
+    document.querySelector("nav").removeAttribute("hidden");
   }
 };
 //-------------------------Login-------------------------//
@@ -752,7 +858,7 @@ const asideCards = (MatchedCards) => {
       cardImg$$.className = `cardImg`;
 
       let cardDiv2$$ = document.createElement("div");
-      cardDiv2$$.className = `card descubierta`;
+      cardDiv2$$.className = `cardd descubierta`;
       // cardDiv2$$.innerHTML = "";
       cardDiv2$$.setAttribute(
         "data-id",
@@ -765,10 +871,23 @@ const asideCards = (MatchedCards) => {
         cardMain$$.classList.remove("fadein");
       }, 1500);
 
+
+      cardMain$$.addEventListener("click",(e)=>{
+
+        cardComponent(singlesCard[singlesCard.length - 1].img,singlesCard[singlesCard.length - 1].name,singlesCard[singlesCard.length - 1].description)
+        e.stopPropagation()
+      })
+
+   
       //  cardDiv2$$.addEventListener("click",(event)=> flipCard(event,i))
     }, 1200);
   }
 };
+//------------------------Event click----------------//
+
+
+//------------------------Event click----------------//
+
 //----------------- asideCards---------------------//
 
 // ----------------- flip ---------------------//
@@ -853,8 +972,6 @@ const compareCards = () => {
 };
 //------------------ comparador --------------------//
 
-
-
 //--------------------- chronometer----------------//
 const chronometer = () => {
   let minutos = 0;
@@ -934,7 +1051,6 @@ const endFn = () => {
 //------------------Start-restart----------------//
 
 const nextLevel = () => {
-
   clearInterval(intervalId);
   segundos = 0;
   minutos = 0;
@@ -946,8 +1062,7 @@ const nextLevel = () => {
   getCollection();
 };
 const newGame = () => {
-
-const   main$$ = document.querySelector("main");
+  const main$$ = document.querySelector("main");
   level = 1;
   cardsToShow = [];
   main$$.innerHTML = "";
@@ -978,23 +1093,23 @@ const start = () => {
 };
 
 //------------------Start-restart----------------//
-  //-------------------------restart selectors-----------------------------//
+//-------------------------restart selectors-----------------------------//
 
-  const restartButton$$ = document.querySelector(
-    '[data-function="restartButton"]'
-  );
-  const pauseButton$$ = document.querySelector('[data-function="pauseButton"]');
-  const startButton$$ = document.querySelector('[data-function="startButton"]');
-  const newGameButton$$ = document.querySelector(
-    '[data-function="newGameButton"]'
-  );
-  const startLi$$ = document.querySelector('[data-function="startLi"]');
-  startLi$$.style.display = "none";
-  pauseButton$$.style.display = "none";
-  pauseButton$$.onclick = pause;
-  newGameButton$$.onclick = newGame;
-  startButton$$.onclick = start;
-  //-------------------------restart selectors-----------------------------//
+const restartButton$$ = document.querySelector(
+  '[data-function="restartButton"]'
+);
+const pauseButton$$ = document.querySelector('[data-function="pauseButton"]');
+const startButton$$ = document.querySelector('[data-function="startButton"]');
+const newGameButton$$ = document.querySelector(
+  '[data-function="newGameButton"]'
+);
+const startLi$$ = document.querySelector('[data-function="startLi"]');
+startLi$$.style.display = "none";
+pauseButton$$.style.display = "none";
+pauseButton$$.onclick = pause;
+newGameButton$$.onclick = newGame;
+startButton$$.onclick = start;
+//-------------------------restart selectors-----------------------------//
 
 // ---------------- inicio   --------------------//
 
@@ -1002,7 +1117,7 @@ const start = () => {
 
 const createTable = (cardArray) => {
   // console.log(cardArray);
-  const main$$ = document.querySelector("main")
+  const main$$ = document.querySelector("main");
   cardArray.sort(() => 0.5 - Math.random());
   main$$.innerHTML = "";
   const divCards$$ = document.createElement("div");
@@ -1032,7 +1147,7 @@ const createTable = (cardArray) => {
     cardImg$$.className = `cardImg`;
 
     let cardDiv2$$ = document.createElement("div");
-    cardDiv2$$.className = `card`;
+    cardDiv2$$.className = `cardd`;
     cardDiv2$$.setAttribute("data-id", cardInfo.id);
     cardDiv2$$.appendChild(cardDiv$$);
     cardDiv$$.appendChild(cardImg$$);
@@ -1067,6 +1182,11 @@ const onInit = async (cards) => {
 };
 const initLogin = async () => {
   landPage();
+  // buttonCollection();
+  // collectionComponent();
+  // const data  = await getData()
+  // console.log(data[0].img);
+  // cardComponent(data[0].img,data[0].name,data[0].description)
 };
 initLogin();
 // ---------------- inicio   --------------------//

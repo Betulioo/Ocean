@@ -12226,7 +12226,7 @@ main {
   display: flex;
 }
 
-.card {
+.cardd {
   width: 5.2rem;
   height: 6.4rem;
   margin: 0.5rem;
@@ -12279,7 +12279,7 @@ main {
   background: transparent;
 }
 
-.card.descubierta {
+.cardd.descubierta {
   transform: rotateY(-180deg);
 }
 
@@ -12287,6 +12287,7 @@ main {
   position: relative;
   width: 10%;
   height: 100%;
+  z-index: 5;
 }
 
 .land-div {
@@ -12671,4 +12672,25 @@ canvas {
 
 #email, #password, button {
   z-index: 2;
+}
+
+.list-table {
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+}
+
+.imgComponent {
+  border: 2px solid rgba(183, 148, 85, 0.7411764706);
+  border-radius: 20px;
+  box-shadow: 5px 5px 10px rgba(232, 170, 13, 0.5), -5px -5px 10px rgba(222, 145, 1, 0.5);
+}
+
+.cardComponent {
+  position: absolute;
+  border: 1px solid rgba(183, 148, 85, 0.7411764706);
+  border-radius: 20px;
+  z-index: 6;
+  top: 150px;
+  right: 78px;
 }/*# sourceMappingURL=style.css.map */
