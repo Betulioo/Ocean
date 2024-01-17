@@ -1,3 +1,4 @@
+@media screen and (max-width: 1368px){
   main {
     flex-grow: 1;
     display: flex;
@@ -80,8 +81,10 @@
   .cardMain{
     // margin: 5% 25% 0% 20%;
     position: relative;
+    top: 25px;
     width: 10%;
     height: 100%;
     z-index: 5;
 
   }
+}

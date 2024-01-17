@@ -1,3 +1,5 @@
+@media screen and (max-width: 1368px){
+
 .list-table{
 width: 100vw;
 height: 100vh;
@@ -18,3 +20,32 @@ z-index: 5;
     top: 150px;
     right: 78px;
 }
+}
+
+@media screen and (max-width: 480px){
+
+    .list-table{
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    }
+    
+    .imgComponent{
+        border: 2px solid #b79455bd ;
+        border-radius: 20px;
+        box-shadow: 5px 5px 10px rgba(232, 170, 13, 0.5), -5px -5px 10px rgba(222, 145, 1, 0.5);
+    }
+    
+    .cardComponent{
+        position: absolute;
+        border: 1px solid #b79455bd ;
+        border-radius: 20px;
+        z-index: 6;
+        top: 150px;
+        right: 78px;
+
+        p{
+            font-size: 15px;
+        }
+    }
+    }

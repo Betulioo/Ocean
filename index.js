@@ -263,7 +263,7 @@ const cardComponent = (cardImg, cardName, cardDescription = "") => {
   const cardDescriptionP$$ = document.createElement("p");
 
   div$$.classList = "card cardComponent fadein";
-  div$$.setAttribute("style", "width: 18rem");
+  div$$.setAttribute("style", "width: 13rem");
 
   img$$.setAttribute("src", `${cardImg}`);
   img$$.classList = "card-img-top imgComponent";
@@ -355,7 +355,6 @@ const loginHtml = () => {
   <div class="login-flex">
     
     <div class="login-block">
-      <h2>Log in</h2>
       <div class="login-form">
         <label id="email-label"
           >Email <input id="email" name="email" type="email" required
@@ -638,23 +637,29 @@ const levels = async (level = 1, array) => {
     } else if (level === 4) {
       lvl(element, level);
       return;
-    } else if (level === 5) {
-      lvl(element, level);
-      return;
-    } else if (level === 6) {
-      lvl(element, level);
-      return;
-    } else if (level === 7) {
-      lvl(element, level);
-      return;
-    } else if (level === 8) {
-      lvl(element, level);
-      return;
-    } else if (level === 9) {
-      lvl(element, level);
-      return;
+    } else if (level >= 5){
+      level = 1
+      newGame()
+      return
     }
-  }
+   }
+  //   else if (level === 5) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 6) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 7) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 8) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 9) {
+  //     lvl(element, level);
+  //     return;
+  //   }
+  // }
 };
 const lvl = (element, i) => {
   console.log(`Level: ${i}`);
@@ -1029,7 +1034,7 @@ const endGame = () => {
   tryAgainBtn$$.onclick = newGame;
   endDiv$$.appendChild(canva);
   endDiv$$.appendChild(endImg$$);
-  endDiv$$.appendChild(tryAgainBtn$$);
+  // endDiv$$.appendChild(tryAgainBtn$$);
   endDiv$$.appendChild(nextLvlBtn$$);
   main$$.appendChild(endDiv$$);
   confeti();
