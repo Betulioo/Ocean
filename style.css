@@ -12314,7 +12314,7 @@ body {
     height: 24vh;
   }
 }
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 900px) {
   main {
     flex-grow: 1;
     display: flex;
@@ -12633,7 +12633,7 @@ body {
     width: 45%;
   }
 }
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 900px) {
   .land-div {
     height: 91vh;
     width: 100vw;
@@ -13094,7 +13094,7 @@ body {
     z-index: 1;
   }
 }
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 900px) {
   .endImg {
     width: 100%;
     border-radius: 10%;
@@ -13268,7 +13268,7 @@ body {
     z-index: 2;
   }
 }
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 900px) {
   .user-login {
     display: flex;
     flex-direction: column;
@@ -13494,7 +13494,7 @@ body {
     right: 78px;
   }
 }
-@media screen and (max-width: 880px) {
+@media screen and (max-width: 900px) {
   .list-table {
     width: 100vw;
     height: 100vh;
