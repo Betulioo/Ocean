@@ -263,7 +263,7 @@ const cardComponent = (cardImg, cardName, cardDescription = "") => {
   const cardDescriptionP$$ = document.createElement("p");
 
   div$$.classList = "card cardComponent fadein";
-  div$$.setAttribute("style", "width: 13rem");
+  // div$$.setAttribute("style", "width: 13rem");
 
   img$$.setAttribute("src", `${cardImg}`);
   img$$.classList = "card-img-top imgComponent";

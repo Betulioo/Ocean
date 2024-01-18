@@ -21,7 +21,42 @@ z-index: 5;
     right: 78px;
 }
 }
+@media screen and (max-width: 880px){
 
+    .list-table{
+    width: 100vw;
+    height: 100vh;
+    z-index: 5;
+    }
+    
+    .imgComponent{
+        border: 2px solid #b79455bd ;
+        border-radius: 20px;
+        box-shadow: 5px 5px 10px rgba(232, 170, 13, 0.5), -5px -5px 10px rgba(222, 145, 1, 0.5);
+    }
+    
+    .cardComponent{
+        display: flex;
+        position: absolute;
+        border: 1px solid #b79455bd ;
+        border-radius: 20px;
+        z-index: 6;
+        top: 56px;
+        right: 78px;
+        width: 7rem;
+        align-items: center;
+        height: 78%;
+        img{
+            width: 100%;
+        }
+h2{
+    font-size: 14px;
+}
+        p{
+            font-size: 7px;
+        }
+    }
+    }
 @media screen and (max-width: 480px){
 
     .list-table{
@@ -43,7 +78,14 @@ z-index: 5;
         z-index: 6;
         top: 150px;
         right: 78px;
-
+        width: 10rem;
+        height: 59%;
+img{
+    width: 100%;
+}
+h2{
+    font-size: 20px;
+}
         p{
             font-size: 15px;
         }
