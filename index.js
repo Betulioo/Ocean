@@ -361,7 +361,7 @@ const loginHtml = () => {
     <div class="login-block">
       <div class="login-form">
         <label id="email-label"
-          >Username <input id="email"  name="username" type="text" placeholder="Guest" 
+          >Username <input id="username"  name="username" type="text" placeholder="Guest" 
         /></label>
         <label
           >Password<input
