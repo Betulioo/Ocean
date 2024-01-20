@@ -5,9 +5,9 @@ const main$$ = document.querySelector("main");
 const body$$ = document.querySelector("body");
 
 // ----------------Booleans----------------//
-const isloged = true;
-const isAdmin = true;
-const isEndGame = true;
+let isloged;
+let isAdmin = true;
+let isEndGame = true;
 
 // ----------------Booleans----------------//
 
@@ -145,7 +145,7 @@ const buttonPage = () => {
   } catch (error) {}
 };
 const landPage = () => {
-  if (page === 1 && !localStorage ) {
+  if (page === 1 && !localStorage.token ) {
     main$$.innerHTML = `
 
 <div class="land-div">
@@ -168,7 +168,7 @@ const landPage = () => {
 `;
 
     buttonPage();
-  } else if (page === 2 && !localStorage) {
+  } else if (page === 2 && !localStorage.token) {
     main$$.innerHTML = ` 
 <div class="land-div">
 
@@ -188,7 +188,7 @@ const landPage = () => {
 </div>
 `;
     buttonPage();
-  } else if (page === 3 && !localStorage) {
+  } else if (page === 3 && !localStorage.token) {
     main$$.innerHTML = ` 
 <div class="land-div">
 
@@ -212,10 +212,10 @@ const landPage = () => {
 </div>
 `;
     buttonPage();
-  } else if (page === 4 && !localStorage) {
+  } else if (page === 4 && !localStorage.token) {
     loginHtml();
     botonSubmit();
-  } else if (localStorage){
+  } else if (localStorage.token){
     newGame();
     document.querySelector("nav").removeAttribute("hidden");
 
@@ -394,6 +394,7 @@ const localpostFetch = async (formData) => {
       const token = result.token;
 
       localStorage.setItem("token", token);
+      isloged = true;
     } else if (!result.success) {
       // console.log("error email no existe");
       await localpostFetchRegister(formData);
@@ -401,6 +402,7 @@ const localpostFetch = async (formData) => {
     } else {
       console.error("error al enviar los datos");
     }
+    console.log(isloged);
     return result;
   } catch (error) {
     console.error("Error al enviar los dato", error);
@@ -444,9 +446,13 @@ const logOut = () => {
   const logOut$$ = document.querySelector("[data-function='logOut']");
   logOut$$.addEventListener("click", () => {
     localStorage.removeItem("token");
+    isloged = false;
+    // window.location.href =
+    //   "https://ocean-beige.vercel.app/";
     window.location.href =
-      "https://ocean-beige.vercel.app/";
+    "http://127.0.0.1:5501/index.html";
   });
+  // console.log(localStorage.token);
 };
 
 const botonSubmit = async () => {
