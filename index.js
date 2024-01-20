@@ -397,12 +397,13 @@ const localpostFetch = async (formData) => {
       isloged = true;
     } else if (!result.success) {
       // console.log("error email no existe");
-      await localpostFetchRegister(formData);
+     await localpostFetchRegister(formData);
+      
       localpostFetch(formData);
     } else {
       console.error("error al enviar los datos");
     }
-    console.log(isloged);
+    // console.log(isloged);
     return result;
   } catch (error) {
     console.error("Error al enviar los dato", error);
