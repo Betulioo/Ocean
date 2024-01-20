@@ -447,10 +447,10 @@ const logOut = () => {
   logOut$$.addEventListener("click", () => {
     localStorage.removeItem("token");
     isloged = false;
-    // window.location.href =
-    //   "https://ocean-beige.vercel.app/";
     window.location.href =
-    "http://127.0.0.1:5501/index.html";
+      "https://ocean-beige.vercel.app/";
+    // window.location.href =
+    // "http://127.0.0.1:5501/index.html";
   });
   // console.log(localStorage.token);
 };
