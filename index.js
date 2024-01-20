@@ -357,7 +357,7 @@ const loginHtml = () => {
     <div class="login-block">
       <div class="login-form">
         <label id="email-label"
-          >Email <input id="email"  name="email" type="email" placeholder="guest@guest.com" 
+          >Username <input id="email"  name="username" type="text" placeholder="Guest" 
         /></label>
         <label
           >Password<input
@@ -373,8 +373,6 @@ const loginHtml = () => {
   </div>
 </form>`;
 
-const email$$ = document.querySelector("#email");
-email$$.textContent="guest@guest.com"
 };
 
 const localpostFetch = async (formData) => {
