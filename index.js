@@ -360,7 +360,7 @@ const loginHtml = () => {
     
     <div class="login-block">
       <div class="login-form">
-        <label id="email-label"
+        <label id="username-label"
           >Username <input id="username"  name="username" type="text" placeholder="Guest" 
         /></label>
         <label
