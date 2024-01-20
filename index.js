@@ -212,9 +212,13 @@ const landPage = () => {
 </div>
 `;
     buttonPage();
-  } else if (page === 4 || localStorage) {
+  } else if (page === 4 && !localStorage) {
     loginHtml();
     botonSubmit();
+  } else if (localStorage){
+    newGame();
+    document.querySelector("nav").removeAttribute("hidden");
+
   }
 };
 
@@ -437,11 +441,11 @@ const localgetFetch = async () => {
   return result;
 };
 const logOut = () => {
-  const logOut$$ = document.querySelector("#logOut");
+  const logOut$$ = document.querySelector("[data-function='logOut']");
   logOut$$.addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href =
-      "https://retro-store-front.vercel.app/z_LOGIN/index-login.html";
+      "https://ocean-beige.vercel.app/";
   });
 };
 
@@ -1188,6 +1192,7 @@ const onInit = async (cards) => {
 };
 const initLogin = async () => {
   landPage();
+  logOut();
   // buttonCollection();
   // collectionComponent();
   // const data  = await getData()
