@@ -145,7 +145,7 @@ const buttonPage = () => {
   } catch (error) {}
 };
 const landPage = () => {
-  if (page === 1) {
+  if (page === 1 && !localStorage ) {
     main$$.innerHTML = `
 
 <div class="land-div">
@@ -168,7 +168,7 @@ const landPage = () => {
 `;
 
     buttonPage();
-  } else if (page === 2) {
+  } else if (page === 2 && !localStorage) {
     main$$.innerHTML = ` 
 <div class="land-div">
 
@@ -188,7 +188,7 @@ const landPage = () => {
 </div>
 `;
     buttonPage();
-  } else if (page === 3) {
+  } else if (page === 3 && !localStorage) {
     main$$.innerHTML = ` 
 <div class="land-div">
 
@@ -212,7 +212,7 @@ const landPage = () => {
 </div>
 `;
     buttonPage();
-  } else if (page === 4) {
+  } else if (page === 4 || localStorage) {
     loginHtml();
     botonSubmit();
   }
