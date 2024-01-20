@@ -399,7 +399,7 @@ const localpostFetch = async (formData) => {
       // console.log("error email no existe");
      await localpostFetchRegister(formData);
       
-      localpostFetch(formData);
+    return  localpostFetch(formData);
     } else {
       console.error("error al enviar los datos");
     }
