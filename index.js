@@ -1,8 +1,7 @@
-let cardsToShow = [];
-
 const gridDiv$$ = document.querySelector('[data-function="grid"]');
 const main$$ = document.querySelector("main");
 const body$$ = document.querySelector("body");
+let cardsToShow = [];
 
 // ----------------Booleans----------------//
 let isloged;
@@ -124,6 +123,11 @@ const navbarHtml = () => {
 
 //-------------------------Levels-------------------------//
 let level = 1;
+
+let levelLengthOne = 1;
+let levelLengthTwo = 2;
+let levelLengthThree = 3;
+let levelLengthFour = 4;
 //-------------------------Levels-------------------------//
 
 //-------------------------contador-------------------------//
@@ -145,7 +149,7 @@ const buttonPage = () => {
   } catch (error) {}
 };
 const landPage = () => {
-  if (page === 1 && !localStorage.token ) {
+  if (page === 1 && !localStorage.token) {
     main$$.innerHTML = `
 
 <div class="land-div">
@@ -215,10 +219,11 @@ const landPage = () => {
   } else if (page === 4 && !localStorage.token) {
     loginHtml();
     botonSubmit();
-  } else if (localStorage.token){
-    newGame();
+  } else if (localStorage.token) {
+    // newGame();
+    // getCollection();
+    continueGame();
     document.querySelector("nav").removeAttribute("hidden");
-
   }
 };
 
@@ -284,39 +289,38 @@ const cardComponent = (cardImg, cardName, cardDescription = "") => {
   divdo$$.appendChild(cardNameP$$);
   divdo$$.appendChild(cardDescriptionP$$);
   div$$.appendChild(divdo$$);
- main$$.appendChild(div$$)
+  main$$.appendChild(div$$);
 
- document.addEventListener("click",()=>{
-  div$$.classList='card cardComponent animati'
-setTimeout(()=>{
-  div$$.style.display = "none";
-},1200)
-})
+  document.addEventListener("click", () => {
+    div$$.classList = "card cardComponent animati";
+    setTimeout(() => {
+      div$$.style.display = "none";
+    }, 1200);
+  });
 };
 //-------------------------Cardcomponent---------------------//
 
 //------------------------CollectionComponent----------------//
 
-const buttonCollection = ()=>{
+const buttonCollection = () => {
   const button$$ = document.createElement("button");
-  button$$.classList="button-class next";
-  button$$.textContent="Next"
-  button$$.setAttribute("type","button");
-  button$$.addEventListener('click',()=>{
-    if(collectionPage ===1){
-  collectionPage++
-    collectionComponent()
-}else if(collectionPage ===2){
-  collectionPage--
-  collectionComponent()
-}
-  })
+  button$$.classList = "button-class next";
+  button$$.textContent = "Next";
+  button$$.setAttribute("type", "button");
+  button$$.addEventListener("click", () => {
+    if (collectionPage === 1) {
+      collectionPage++;
+      collectionComponent();
+    } else if (collectionPage === 2) {
+      collectionPage--;
+      collectionComponent();
+    }
+  });
 
-  return button$$
-}
+  return button$$;
+};
 
 const collectionComponent = async () => {
-
   const divTable$$ = document.createElement("div");
   divTable$$.classList = "list-table container";
   const divRow$$ = document.createElement("div");
@@ -326,24 +330,22 @@ const collectionComponent = async () => {
   main$$.appendChild(divTable$$);
   divTable$$.appendChild(buttonCollection());
 
-  divRow$$.innerHTML=""
+  divRow$$.innerHTML = "";
 
   const response = await fetch(`https://ocean-db.vercel.app/card`);
   const cards = await response.json();
   // console.log(cards);
   for (let i = 0; i < cards.length; i++) {
     const element = cards[i];
-    if (i < 6 && collectionPage ===1) {
+    if (i < 6 && collectionPage === 1) {
       cardComponent(element.img, element.name);
-      
-    } else if (i >= 6 && collectionPage ===2) {
+    } else if (i >= 6 && collectionPage === 2) {
       cardComponent(element.img, element.name);
-    }else {
+    } else {
       // console.log(element);
     }
   }
 
-  
   // console.log(collectionPage);
 };
 //------------------------CollectionComponent----------------//
@@ -376,7 +378,6 @@ const loginHtml = () => {
     </div>
   </div>
 </form>`;
-
 };
 
 const localpostFetch = async (formData) => {
@@ -394,16 +395,20 @@ const localpostFetch = async (formData) => {
       const token = result.token;
 
       localStorage.setItem("token", token);
+      localStorage.setItem("level", 1);
+      // localStorage.setItem("cardsToShow",cardsToShow);
+
       isloged = true;
     } else if (!result.success) {
       // console.log("error email no existe");
-     await localpostFetchRegister(formData);
-      
-    return  localpostFetch(formData);
+      await localpostFetchRegister(formData);
+
+      return localpostFetch(formData);
     } else {
       console.error("error al enviar los datos");
     }
     // console.log(isloged);
+
     return result;
   } catch (error) {
     console.error("Error al enviar los dato", error);
@@ -448,8 +453,7 @@ const logOut = () => {
   logOut$$.addEventListener("click", () => {
     localStorage.removeItem("token");
     isloged = false;
-    window.location.href =
-      "https://ocean-beige.vercel.app/";
+    window.location.href = "https://ocean-beige.vercel.app/";
     // window.location.href =
     // "http://127.0.0.1:5501/index.html";
   });
@@ -469,7 +473,7 @@ const botonSubmit = async () => {
     try {
       const result = await localpostFetch(formDataObject);
       if (result.success) {
-        putCollectionUser();
+        await putCollectionUser();
         //  createCollection(result.userInfo._id,result.userInfo.username)
         ifLogged();
       }
@@ -479,10 +483,14 @@ const botonSubmit = async () => {
   });
 };
 
-const ifLogged = () => {
+const ifLogged = async () => {
   if (localStorage) {
-    localgetFetch();
-    newGame();
+    await localgetFetch();
+    await getCollection();
+    let cardStoraged = JSON.parse(localStorage.getItem("cardsToShow"));
+    onInit(cardStoraged);
+    // console.log("loged");
+    // newGame();
     document.querySelector("nav").removeAttribute("hidden");
   }
 };
@@ -500,12 +508,16 @@ const getCollection = async () => {
     const deck = collection.deckId;
     const cardsId = deck[0].cards;
     const cards = await getCardsUser(cardsId);
+    let cardMapJson = JSON.stringify(cards);
+    localStorage.setItem("cardsToShow", cardMapJson);
+    // let cardStoraged = JSON.parse(localStorage.getItem("cardsToShow"));
 
-    cards;
-
-    onInit(cards);
+    //   console.log("collectionId");
+    // onInit(cardStoraged);
     hideLoadingScreeen();
   } else {
+    // console.log("else");
+
     showLoadingScreen();
     const cardstwo = await getData();
     onInit(cardstwo);
@@ -516,13 +528,16 @@ const getCardsUser = async (cardsId) => {
   let cardsArray = [];
   for (let i = 0; i < cardsId.length; i++) {
     const element = cardsId[i];
-    const response = await fetch(`https://ocean-db.vercel.app/card/id/${element}`);
+    const response = await fetch(
+      `https://ocean-db.vercel.app/card/id/${element}`
+    );
     const cards = await response.json();
     cardsArray.push(cards);
   }
   // console.log(cardsArray);
   return cardsArray;
 };
+
 //-------------------------Collection--------------------//
 
 //--------------------------Put method-------------------//
@@ -569,13 +584,16 @@ const putUser = async (id, collectionId) => {
   try {
     const formDataObject = { collection: `${collectionId}` };
 
-    const response = await fetch(`https://ocean-db.vercel.app/user/edit/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(formDataObject),
-      headers: {
-        "content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `https://ocean-db.vercel.app/user/edit/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(formDataObject),
+        headers: {
+          "content-Type": "application/json",
+        },
+      }
+    );
     const result = await response.json();
     if (response.ok) {
       const token = result.token;
@@ -627,8 +645,9 @@ const getData = async () => {
 //---------------------Fetch API--------------------------//
 
 //-------------------Levels---------------------------//
-const levels = async (level = 1, array) => {
+const levels = async (level, array) => {
   let counterLevel = level - 1;
+
   // initialize()
   const cards = await array;
 
@@ -636,25 +655,46 @@ const levels = async (level = 1, array) => {
 
   for (let i = counterLevel; i < cards.length; i++) {
     const element = cards[i];
+    let cardsToStorage = JSON.parse(localStorage.getItem("cardsToStorage"));
+    if (localStorage.getItem("level") == 1) {
+      lvl(element, level);
+      if (!localStorage.getItem("cardsToStorage")) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+      }
+      // console.log(cardsToStorage);
+      return;
+    } else if (localStorage.getItem("level") == 2) {
+      lvl(element, level);
 
-    if (level === 1) {
-      lvl(element, level);
+      if (cardsToStorage.length === 1) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+      }
+      // console.log(cardsToStorage);
       return;
-    } else if (level === 2) {
+    } else if (localStorage.getItem("level") == 3) {
       lvl(element, level);
+
+      if (cardsToStorage.length === 2) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+        // console.log(cardsToStorage);}
+      }
       return;
-    } else if (level === 3) {
+    } else if (localStorage.getItem("level") == 4) {
       lvl(element, level);
+      if (cardsToStorage.length === 4) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+        // console.log(cardsToStorage);
+      }
       return;
-    } else if (level === 4) {
-      lvl(element, level);
+    } else if (level >= 5) {
+      newGame();
       return;
-    } else if (level >= 5){
-      level = 1
-      newGame()
-      return
     }
-   }
+  }
   //   else if (level === 5) {
   //     lvl(element, level);
   //     return;
@@ -675,10 +715,100 @@ const levels = async (level = 1, array) => {
 };
 const lvl = (element, i) => {
   // console.log(`Level: ${i}`);
+
+  // let cardsToStorage = JSON.stringify(cards);
+
   cardsToShow.push(element);
+
   const cardMap = mapped(cardsToShow);
-  // const allcardMap = cardMap.concat(cardMap)
+  // console.log(cardMap);
   createTable(cardMap.concat(cardMap));
+  return;
+};
+const levelsToContinue = async (level, array) => {
+  let counterLevel = level - 1;
+  // initialize()
+  // const cards = await array;
+
+  // console.log(array.length);
+
+  for (let i = counterLevel; i < array.length; i++) {
+    const element = array[i];
+    let cardsToStorage = JSON.parse(localStorage.getItem("cardsToStorage"));
+    if (localStorage.getItem("level") == 1) {
+      lvlToContinue();
+
+      if (!localStorage.getItem("cardsToStorage")) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+      }
+      // console.log(cardsToStorage);
+      return;
+    } else if (localStorage.getItem("level") == 2) {
+      lvlToContinue();
+
+      if (cardsToStorage.length === 1) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+      }
+      // console.log(cardsToStorage);
+      return;
+    } else if (localStorage.getItem("level") == 3) {
+      lvlToContinue();
+
+      if (cardsToStorage.length === 2) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+        // console.log(cardsToStorage);}
+      }
+      return;
+    } else if (localStorage.getItem("level") == 4) {
+      lvlToContinue();
+      if (cardsToStorage.length === 4) {
+        let cardsToStorage = JSON.stringify(cardsToShow);
+        localStorage.setItem("cardsToStorage", cardsToStorage);
+        // console.log(cardsToStorage);
+      }
+      return;
+    } else if (level >= 5) {
+      newGame();
+      return;
+    }
+  }
+  //   else if (level === 5) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 6) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 7) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 8) {
+  //     lvl(element, level);
+  //     return;
+  //   } else if (level === 9) {
+  //     lvl(element, level);
+  //     return;
+  //   }
+  // }
+};
+const lvlToContinue = () => {
+  // console.log(`Level: ${i}`);
+
+  // let cardsToStorage = JSON.stringify(cards);
+
+  let cardsToShow = JSON.parse(localStorage.getItem("cardsToStorage"));
+if(cardsToShow){
+// console.log(cardsToShow);
+
+  const cardMap = mapped(cardsToShow);
+  createTable(cardMap.concat(cardMap));
+}else {
+  let cardsToShow = JSON.parse(localStorage.getItem("cardsToShow"));
+  const cardMap = mapped(cardsToShow);
+  levels(level,cardMap)
+}
   return;
 };
 //-------------------Levels---------------------------//
@@ -888,20 +1018,20 @@ const asideCards = (MatchedCards) => {
         cardMain$$.classList.remove("fadein");
       }, 1500);
 
+      cardMain$$.addEventListener("click", (e) => {
+        cardComponent(
+          singlesCard[singlesCard.length - 1].img,
+          singlesCard[singlesCard.length - 1].name,
+          singlesCard[singlesCard.length - 1].description
+        );
+        e.stopPropagation();
+      });
 
-      cardMain$$.addEventListener("click",(e)=>{
-
-        cardComponent(singlesCard[singlesCard.length - 1].img,singlesCard[singlesCard.length - 1].name,singlesCard[singlesCard.length - 1].description)
-        e.stopPropagation()
-      })
-
-   
       //  cardDiv2$$.addEventListener("click",(event)=> flipCard(event,i))
     }, 1200);
   }
 };
 //------------------------Event click----------------//
-
 
 //------------------------Event click----------------//
 
@@ -944,6 +1074,7 @@ const contador = () => {
 const scorePlay = () => {
   score++;
   score$$.textContent = ` ${score}`;
+  // console.log(score);
   endFn();
 };
 //-------------------- contador ------------//
@@ -983,6 +1114,7 @@ const compareCards = () => {
       setTimeout(asideCards(cardsMatched), 5000);
       contador();
       scorePlay();
+      endFn();
     }, 900);
   }
   // console.log(cardsPicked);
@@ -1058,7 +1190,7 @@ const endGame = () => {
 };
 
 const endFn = () => {
-  if (score === cardsToShow.length) {
+  if (level == score) {
     chronometer();
     endGame();
   }
@@ -1075,12 +1207,33 @@ const nextLevel = () => {
   score = 0;
   divCount$$.textContent = ` ${count}`;
   divCount2$$.textContent = ` ${score}`;
-  // cardssDiv$$.style.display = "block"
-  getCollection();
+  // cardssDiv$$.style.display = "block";
+
+  let cardStoraged = JSON.parse(localStorage.getItem("cardsToShow"));
+  onInit(cardStoraged);
 };
-const newGame = () => {
+
+const nextLevelTocontinue = () => {
+  clearInterval(intervalId);
+  segundos = 0;
+  minutos = 0;
+  count = 0;
+  score = 0;
+  divCount$$.textContent = ` ${count}`;
+  divCount2$$.textContent = ` ${score}`;
+  // cardssDiv$$.style.display = "block";
+
+  let cardStoraged = JSON.parse(localStorage.getItem("cardsToStorage"));
+  // console.log(level);
+
+  levelsToContinue(level, cardStoraged);
+  chronometer();
+};
+const newGame = async () => {
   const main$$ = document.querySelector("main");
   level = 1;
+  localStorage.setItem("level", `${level}`);
+  localStorage.removeItem("cardsToStorage");
   cardsToShow = [];
   main$$.innerHTML = "";
   clearInterval(intervalId);
@@ -1091,7 +1244,28 @@ const newGame = () => {
   divCount$$.textContent = ` ${count}`;
   divCount2$$.textContent = ` ${score}`;
   // cardssDiv$$.style.display = "block"
-  getCollection();
+  let cardStoraged = JSON.parse(localStorage.getItem("cardsToShow"));
+  // console.log(cardStoraged);
+  onInit(cardStoraged);
+};
+
+const continueGame = async () => {
+  const main$$ = document.querySelector("main");
+  level = localStorage.getItem("level");
+  main$$.innerHTML = "";
+  clearInterval(intervalId);
+  segundos = 0;
+  minutos = 0;
+  count = 0;
+  score = 0;
+  divCount$$.textContent = ` ${count}`;
+  divCount2$$.textContent = ` ${score}`;
+  cardsToShow = JSON.parse(localStorage.getItem("cardsToStorage"))
+  let cardStoraged = JSON.parse(localStorage.getItem("cardsToStorage"));
+  // console.log(level);
+
+  levelsToContinue(level, cardStoraged);
+  chronometer();
 };
 const pause = () => {
   clearInterval(intervalId);
@@ -1100,6 +1274,7 @@ const pause = () => {
 
 const nextLvl = () => {
   level++;
+  localStorage.setItem("level", `${level}`);
   nextLevel();
   pauseButton$$.style.display = "block";
 };
@@ -1191,10 +1366,9 @@ const mapped = (noMapped) => {
 //this is our initializator function
 
 const onInit = async (cards) => {
-  const allCards = await cards;
-
-  levels(level, allCards);
-
+  levels(level, cards);
+  // console.log(cards);
+  // levelsToContinue(level,cards);
   chronometer();
 };
 const initLogin = async () => {
