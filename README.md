@@ -1,7 +1,7 @@
 # Ocean
 
 Oceano is a memory game, where you have different decks of cards each with different types of marine animals, the idea is that as you advance in the game you get the cards of each deck.
-
+## Mobile only
 ## What is it about?
 Mainly the goal of this project is to increase my programming skills, reinforce concepts and apply new ways.
 
@@ -20,3 +20,7 @@ The current state of the game, we start by registering a new account which, when
 We start with a pair of cards first, and as we progress we increase the pairs of cards with the difficulty.
 
 We have 4 levels of difficulty at the moment.
+
+## Screenshots
+
+![App Screenshot](https://th.bing.com/th/id/OIG.JOqPVkohcFLpL1Orc56E?pid=ImgGn)
