@@ -392,20 +392,24 @@ const localpostFetch = async (formData) => {
     const result = await response.json();
     // console.log(result.success);
     if (result.success) {
+      // console.log(result.success + result.message);
       const token = result.token;
-
+      console.log("hola" + result);
       localStorage.setItem("token", token);
       localStorage.setItem("level", 1);
       // localStorage.setItem("cardsToShow",cardsToShow);
 
       isloged = true;
-    } else if (!result.success) {
+    } else if (!result.success && result.message == "Email does not exist") {
       // console.log("error email no existe");
-      await localpostFetchRegister(formData);
-
-      return localpostFetch(formData);
-    } else {
-      console.error("error al enviar los datos");
+      const data = await localpostFetchRegister(formData);
+      if (data.success) {
+        return localpostFetch(formData);
+      } else {
+        return;
+      }
+    } else if (!result.success && result.message == "Password does not match") {
+      alert("Password does not match");
     }
     // console.log(isloged);
 
@@ -425,10 +429,12 @@ const localpostFetchRegister = async (formData) => {
     });
     const result = await response.json();
 
-    if (response.ok) {
+    if (result.success) {
       // console.log("datos enviados con exito");
-    } else {
-      // console.error("error al enviar los datos");
+      alert("User Registered");
+    } else if (result.message == "Password does not match the pattern") {
+      alert("Password must be at least 5 in length and contain at least one numbers(1,2,3) and at least one special character(!#-)");
+      return result;
     }
     // console.log(response);
     return result;
@@ -799,16 +805,16 @@ const lvlToContinue = () => {
   // let cardsToStorage = JSON.stringify(cards);
 
   let cardsToShow = JSON.parse(localStorage.getItem("cardsToStorage"));
-if(cardsToShow){
-// console.log(cardsToShow);
+  if (cardsToShow) {
+    // console.log(cardsToShow);
 
-  const cardMap = mapped(cardsToShow);
-  createTable(cardMap.concat(cardMap));
-}else {
-  let cardsToShow = JSON.parse(localStorage.getItem("cardsToShow"));
-  const cardMap = mapped(cardsToShow);
-  levels(level,cardMap)
-}
+    const cardMap = mapped(cardsToShow);
+    createTable(cardMap.concat(cardMap));
+  } else {
+    let cardsToShow = JSON.parse(localStorage.getItem("cardsToShow"));
+    const cardMap = mapped(cardsToShow);
+    levels(level, cardMap);
+  }
   return;
 };
 //-------------------Levels---------------------------//
@@ -1260,7 +1266,7 @@ const continueGame = async () => {
   score = 0;
   divCount$$.textContent = ` ${count}`;
   divCount2$$.textContent = ` ${score}`;
-  cardsToShow = JSON.parse(localStorage.getItem("cardsToStorage"))
+  cardsToShow = JSON.parse(localStorage.getItem("cardsToStorage"));
   let cardStoraged = JSON.parse(localStorage.getItem("cardsToStorage"));
   // console.log(level);
 
