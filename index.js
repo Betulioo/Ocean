@@ -204,7 +204,9 @@ const landPage = () => {
   </div> 
       <h2>Oceano has the following functionalities:</h2>
       <p>Registration and login: </p>
-      <p>When you register a deck collection is created where your progress and the different cards obtained will be saved.
+      <p>The registration is combined with the login, if the account exists it will login otherwise it will create a new account.
+      </p>
+      <p>To create the user the password must have letters, numbers and symbols combined.
       </p>
       <p>Different levels of difficulty: </p>
       <p>As you progress the number of cards will increase.</p>
