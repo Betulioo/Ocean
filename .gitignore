@@ -1,9 +1,2 @@
- node_modules
- .node_modules
-
-# @popperjs
-# . @popperjs
-# js
-# .js
-# scss
-# .scss
+node_modules
+.node_modules
